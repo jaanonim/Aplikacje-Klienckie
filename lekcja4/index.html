@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            color: #fff;
+        }
+
+        #main {
+            width: 80vw;
+            height: 100vh;
+            background-color: rgb(0, 44, 82);
+
+        }
+
+        #panel {
+            width: 20vw;
+            height: 100vh;
+            background-color: rgb(73, 79, 85);
+            padding: 20px;
+        }
+
+        .asterioda {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: black;
+
+        }
+
+        #rakieta {
+            position: absolute;
+            width: 25px;
+            height: 75px;
+            background-color: brown;
+            z-index: 100;
+            background: url(IMG/rakieta.jpg);
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+
+    <script src="JS/jq.js"></script>
+    <script src="JS/main.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="rakieta"></div>
+
+    </div>
+    <div id="panel">
+        <button id="step">step</button><br>
+        <button id="jump">jump</button><br>
+        <button id="fly">fly</button><br>
+        <input type="checkbox" id="rotacja"> rotacja
+    </div>
+</body>
+
+</html>
