@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+            $(document).on("mousedown", () => {
+                $(document).on("mousemove", function (e) {
+                    if (e.clientX > 400 || e.clientY > 500) {
+                        return
+                    }
+
+                    let pos = { up: false, left: e.clientX, top: e.clientY }
+
+                    $.ajax({
+                        url: "/post",
+                        contentType: 'application/json',
+                        data: JSON.stringify(pos),
+                        type: "POST",
+                        success: response,
+                        error: function (xhr, status, error) {
+                            console.log('Error: ' + error.message);
+                        }
+                    })
+                })
+            })
+            $(document).on("mouseup", (e) => {
+                $(document).off("mousemove")
+                let pos = { up: true, left: e.clientX, top: e.clientY }
+                $.ajax({
+                    url: "/post",
+                    contentType: 'application/json',
+                    data: JSON.stringify(pos),
+                    type: "POST",
+                    success: response,
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error.message);
+                    }
+                })
+            })
+
+            function response(data) {
+                console.log(data)
+                var d = JSON.parse(data)
+
+                $("#storage").empty()
+
+                for (let i = 0; i < d.o.length; i++) {
+                    let obj = d.o[i]
+                    let e = $("<div>")
+                    e.addClass("box")
+
+                    if (obj.height < 0) {
+                        obj.height = -obj.height
+
+                        obj.top -= obj.height
+                    }
+                    if (obj.width < 0) {
+                        obj.width = -obj.width
+
+                        obj.left -= obj.width
+                    }
+
+                    e.offset({ top: obj.top, left: obj.left })
+                    e.height(obj.height)
+                    e.width(obj.width)
+                    $("#storage").append(e)
+                }
+
+
+            }
+
+        })
+    </script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+        }
+
+        .panel {
+            width: 400px;
+            height: 500px;
+        }
+
+        #rigth {
+            background-color: aqua;
+        }
+
+        #left {
+            background-color: brown;
+        }
+
+        .box {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background-color: crimson;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="rigth" class="panel"></div>
+    <div id="left" class="panel"></div>
+    <div id="storage"></div>
+
+
+</body>
+
+</html>

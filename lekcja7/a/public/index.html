@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+            $("#button").on("click", () => {
+                let a = $("#i1").val()
+                let b = $("#i2").val()
+                console.log(a, b)
+                $.ajax({
+                    url: "/post",
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        a: a,
+                        b: b
+                    }),
+                    type: "POST",
+                    success: function (data) {
+                        console.log(data)
+                        var obj = JSON.parse(data)
+                        alert(`Wartosc 1: ${obj.a},Wartosc 2: ${obj.b}`)
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error.message);
+                    }
+                })
+            })
+        })
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="i1">
+    <input id="i2">
+    <button id="button">SEND</button>
+</body>
+
+</html>

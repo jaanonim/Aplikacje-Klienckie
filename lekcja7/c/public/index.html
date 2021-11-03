@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+
+            $(document).on("mousemove", function (e) {
+                if (e.clientX > 400 || e.clientY > 500) {
+                    return
+                }
+                let pos = { left: e.clientX, top: e.clientY }
+                let time = Date.now()
+                $.ajax({
+                    url: "/post",
+                    contentType: 'application/json',
+                    data: JSON.stringify(pos),
+                    type: "POST",
+                    success: function (data) {
+                        console.log(data)
+                        var obj = JSON.parse(data)
+
+                        if (!$("#box").prop('checked')) {
+                            $("#storage").empty()
+                        }
+
+                        let e = $("<div>")
+                        e.addClass("pos")
+                        e.offset(obj)
+                        e.html(obj.left + "<br>" + obj.top)
+                        $("#storage").append(e)
+
+                        e = $("<div>")
+                        e.addClass("ping")
+                        e.offset({ top: obj.top, left: obj.left + 400 })
+                        e.text(Date.now() - time)
+                        $("#storage").append(e)
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + error.message);
+                    }
+                })
+            })
+        })
+    </script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+        }
+
+        .panel {
+            width: 400px;
+            height: 500px;
+        }
+
+        #rigth {
+            background-color: aqua;
+        }
+
+        #left {
+            background-color: brown;
+        }
+
+        .pos {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background-color: crimson;
+        }
+
+        .ping {
+            position: fixed;
+
+            width: 50px;
+            height: 50px;
+            background-color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="storage"></div>
+    <div id="rigth" class="panel"></div>
+    <div id="left" class="panel"></div>
+    <input type="checkbox" id="box">
+
+</body>
+
+</html>
