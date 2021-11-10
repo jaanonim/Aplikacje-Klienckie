@@ -1,0 +1,22 @@
+<header>
+    {{subject}}
+</header>
+<main>
+
+
+    <form action="/data">
+        <select name="f">
+            {{#each fields}}
+            <option value="{{name}}">{{name}}</option>
+            {{/each}}
+        </select>
+        <input type="submit" value="SEND">
+    </form>
+
+
+
+
+</main>
+<footer>
+    {{footer}}
+</footer>
