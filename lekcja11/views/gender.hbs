@@ -1,0 +1,28 @@
+{{#if user_id }}
+<table>
+    <tr>
+        <th>id</th>
+        <th>plec</th>
+    </tr>
+    {{#each data.m}}
+    <tr>
+        <td>{{id}}</td>
+        <td>m</td>
+    </tr>
+    {{/each}}
+</table>
+<table>
+    <tr>
+        <th>id</th>
+        <th>plec</th>
+    </tr>
+    {{#each data.k}}
+    <tr>
+        <td>{{id}}</td>
+        <td>k</td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+Nie masz dostepu! <br> <a href="/login" style="color: #fff;">Kliknij tu aby sie zalogować. </a>
+{{/if}}

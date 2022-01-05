@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="CSS/main.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <lu>
+            <li>
+                <a href="/">main</a>
+            </li>
+            <li>
+                <a href="/register">register</a>
+            </li>
+            <li>
+                <a href="/login">login</a>
+            </li>
+            <li>
+                <a href="/admin">admin</a>
+            </li>
+            {{#if user_id }}
+            <li>
+                <a href="/logout">logout</a>
+            </li>
+            {{/if}}
+        </lu>
+        {{#if user_id }}
+        {{> header }}
+        {{/if}}
+    </header>
+
+
+    {{#if user_id }}
+    <div class="data">
+        Zalogowano jako: {{user.login}}
+    </div>
+    {{/if}}
+
+
+    <main>
+
+
+        {{{body}}}
+
+    </main>
+
+
+    <footer>
+        jaanonim &copy; 2022
+    </footer>
+
+</body>
+
+</html>

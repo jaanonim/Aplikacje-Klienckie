@@ -1,0 +1,24 @@
+{{#if user_id }}
+<table>
+    <tr>
+        <th>id</th>
+        <th>login</th>
+        <th>password</th>
+        <th>wiek</th>
+        <th>student</th>
+        <th>plec</th>
+    </tr>
+    {{#each data}}
+    <tr>
+        <td>{{id}}</td>
+        <td>{{login}}</td>
+        <td>{{password}}</td>
+        <td>{{age}}</td>
+        <td><input type="checkbox" disabled {{#if student}}checked{{/if}}></td>
+        <td>{{plec}}</td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+Nie masz dostepu! <br> <a href="/login" style="color: #fff;">Kliknij tu aby sie zalogować. </a>
+{{/if}}
