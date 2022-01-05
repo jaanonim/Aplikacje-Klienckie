@@ -14,7 +14,7 @@ app.set('view engine', 'hbs');
 app.engine('hbs', hbs({
     defaultLayout: 'main.hbs',
     extname: '.hbs',
-    partialsDir: "views/partials",
+    partialsDir: __dirname + "/views/partials",
 
 }));
 
@@ -42,7 +42,6 @@ function get_data(data) {
     if (data !== undefined) {
         d.data = data
     }
-    console.log(d)
     return d
 }
 
@@ -100,13 +99,15 @@ app.get("/show", (req, res) => {
 
 
 app.post("/register", (req, res) => {
+
     let obj = {
         student: req.body["student"],
         login: req.body["login"],
         password: req.body["password"],
-        age: req.body["age"],
+        age: parseInt(req.body["age"]),
         plec: req.body["plec"]
     }
+
     if (obj.student == "on") {
         obj.student = true
     } else {
@@ -121,7 +122,7 @@ app.post("/register", (req, res) => {
         res.send('Za długi login lub hasło <a href="/">home</a>')
         return
     }
-    if (!(obj.plec === 'm' || obj.plec === 'k')) {
+    if (!(obj.plec === 'm' || obj.plec === 'k') || typeof (obj.login) !== "string" || typeof (obj.password) !== "string" || typeof (obj.login) !== "string" || typeof (obj.login) !== "string" || obj.age < 1 || obj.age > 20 || isNaN(obj.age)) {
         res.send('Nie hakuj mi tego! Niepoprawne dane <a href="/">home</a>')
         return
     }

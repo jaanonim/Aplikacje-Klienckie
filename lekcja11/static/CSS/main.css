@@ -3,6 +3,23 @@
     padding: 0;
 }
 
+table {
+    /* border: 2px solid #fff;*/
+    padding: 5px 0 20px 0;
+}
+
+td {
+    border: 1px solid #fff;
+    padding: 5px;
+}
+
+th {
+    border: 1px solid #fff;
+    background-color: #444;
+    padding: 5px;
+
+}
+
 li {
     display: inline-block;
     margin: 0;
