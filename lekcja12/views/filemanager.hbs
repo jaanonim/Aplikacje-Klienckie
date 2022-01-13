@@ -1,0 +1,17 @@
+<h2>Filemanager</h2>
+<a href="/reset">Resetuj tabele</a>
+<table>
+    <tr>
+        <th>id</th>
+        <th>img</th>
+        <th>name</th>
+        <th>type</th>
+        <th>size</th>
+        <th>-</th>
+        <th>-</th>
+        <th>-</th>
+    </tr>
+    {{#each files}}
+    {{> tile}}
+    {{/each}}
+</table>
