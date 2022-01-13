@@ -7,7 +7,7 @@
 
         web: npm start
     
-2) Create heroku app
+2) Create heroku app (this buildpack is for node.js)
 
         heroku create -a lekcjaXXX-mm3i2a --buildpack https://github.com/heroku/heroku-buildpack-nodejs.git
 
