@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $.ajax({
+            url: " /cwiczenia", data: {}, type: "GET",
+            success: function (tab) {
+                let list = ""
+                tab.forEach(e => {
+                    list += `<div><a href='../cwiczenia/${e}'>${e}</a></div>`
+                }),
+                    document.querySelector("#root").innerHTML = list
+            },
+            error: function (xhr, status, error) { },
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Tree js 1 lekcja</h1>
+    <div id="root" style="overflow:hidden; margin: 0;"></div>
+</body>
+
+</html>
