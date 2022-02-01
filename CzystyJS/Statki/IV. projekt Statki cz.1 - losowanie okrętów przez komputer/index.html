@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        main {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+        }
+
+        .element {
+            background-color: gray;
+            border: 1px solid #fff;
+            width: 50px;
+            height: 50px;
+        }
+
+        .statek {
+            background-color: red;
+        }
+    </style>
+
+</head>
+
+<body>
+    <main> </main>
+
+    <script>
+
+        function generate_pos() {
+            return [Math.floor(Math.random() * (size_x)), Math.floor(Math.random() * (size_y))]
+        }
+
+        function valid_pos(x, y) {
+            if (x >= 0 && x < size_x && y >= 0 && y < size_y) {
+                return true
+            }
+            return false
+        }
+
+        function check_pos_poziom(pos, k, w) {
+            if (pos[0] + k - 1 >= size_x - 1) {
+                return false
+            }
+            for (let xs = -1; xs < k + 1; xs++) {
+                for (let ys = -1; ys < 2; ys++) {
+                    if (!valid_pos(pos[0] + xs, pos[1] + ys)) {
+                        continue
+                    }
+                    if (w) {
+                        let v = 2
+                        if (xs < 0 || ys < 0 || ys == 1 || xs == k) {
+                            v = 1
+                        }
+                        plansza[pos[0] + xs][pos[1] + ys] = v
+                        continue
+                    } else {
+
+                        if (plansza[pos[0] + xs][pos[1] + ys] > 1) {
+                            return false
+                        }
+                    }
+                }
+            }
+            return true
+        }
+
+        function check_pos_pion(pos, k, w) {
+            if (pos[1] + k - 1 >= size_y - 1) {
+                return false
+            }
+            for (let ys = -1; ys < k + 1; ys++) {
+                for (let xs = -1; xs < 2; xs++) {
+                    if (!valid_pos(pos[0] + xs, pos[1] + ys)) {
+                        continue
+                    }
+                    if (w) {
+                        let v = 2
+                        if (xs < 0 || ys < 0 || ys == k || xs == 1) {
+                            v = 1
+                        }
+                        plansza[pos[0] + xs][pos[1] + ys] = v
+                        continue
+                    }
+                    else {
+
+                        if (plansza[pos[0] + xs][pos[1] + ys] > 1) {
+                            return false
+                        }
+                    }
+                }
+            }
+            return true
+        }
+
+        function check_pos(pos, k) {
+            if (Math.random() > 0.5) {
+                if (check_pos_poziom(pos, k, false)) {
+                    return 1
+                }
+                else if (check_pos_pion(pos, k, false)) {
+                    return -1
+                }
+                else {
+                    return 0
+                }
+            }
+            else {
+                if (check_pos_pion(pos, k, false)) {
+                    return -1
+                }
+                else if (check_pos_poziom(pos, k, false)) {
+                    return 1
+                }
+                else {
+                    return 0
+                }
+            }
+        }
+
+        function display() {
+
+            main = document.querySelector("main")
+            for (let y = 0; y < size_y; y++) {
+                for (let x = 0; x < size_x; x++) {
+                    element = document.createElement("DIV")
+                    element.classList.add("element")
+                    if (plansza[x][y] == 2) {
+                        element.classList.add("statek")
+                    }
+                    element.innerText = plansza[x][y]
+                    main.appendChild(element)
+
+                }
+            }
+        }
+
+        function emptyMap() {
+            for (let x = 0; x < size_x; x++) {
+                plansza[x] = []
+                for (let y = 0; y < size_y; y++) {
+                    plansza[x][y] = 0
+                }
+            }
+        }
+
+        function spawn_ship(k) {
+            do {
+                pos = generate_pos()
+                ori = check_pos(pos, k + 1)
+            }
+            while (ori == 0)
+
+            if (ori == 1) {
+                check_pos_poziom(pos, k + 1, true)
+            }
+            else {
+                check_pos_pion(pos, k + 1, true)
+            }
+        }
+
+
+        function generate_map() {
+
+            for (let k = statki.length - 1; k >= 0; k--) {
+                for (let j = 0; j < statki[k]; j++) {
+                    spawn_ship(k)
+                }
+            }
+
+        }
+
+        var plansza = []
+        const size_x = 10
+        const size_y = 10
+        const statki = [4, 3, 2, 1]
+
+        emptyMap()
+        generate_map()
+        display()
+
+    </script>
+</body>
+
+</html>

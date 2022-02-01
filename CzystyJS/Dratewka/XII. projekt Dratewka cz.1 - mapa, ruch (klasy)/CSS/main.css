@@ -1,0 +1,47 @@
+:root {
+    --color: #000
+}
+
+@font-face {
+    font-family: TheFont;
+    src: url('../FONTS/PressStart2P.ttf');
+  }
+
+
+body {
+    color: #fff;
+    background-color: #333;
+    image-rendering: pixelated;
+    font-family: TheFont;
+}
+
+#image{
+    background-color: var(--color);
+    width: 400px;
+    height: 300px;
+}
+
+#text{
+    background-color: #222;
+    color: #fff;
+    width: 400px;
+    height: 200px;
+}
+
+#input{
+    color: #fff;
+    width: 400px;
+    background-color: #222;
+    border: 0px;
+    font-family: TheFont;
+    padding: 5px 0;
+}
+
+#input:focus{
+    outline-style: none;
+    box-shadow: none;
+    border-color: transparent;
+    background-color: black;
+    color: white;
+    border: 0px;
+}

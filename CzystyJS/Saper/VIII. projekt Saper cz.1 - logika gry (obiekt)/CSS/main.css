@@ -1,0 +1,45 @@
+:root {
+    --x_size: 10;
+    --y_size: 10;
+    --size: 16px
+}
+
+body{
+    color: #fff;
+    background-color: #333;
+}
+
+#board {
+    float: left;
+    display: grid;
+    grid-template-columns: repeat(var(--x_size), var(--size));
+    grid-template-rows: repeat(var(--y_size), var(--size));
+    padding: 20px;
+}
+
+.tile{
+    color: magenta;
+    height: var(--size);
+    width: var(--size);
+    background-color: rgb(155, 155, 155);
+    background-image: url("../IMG/klepa.PNG");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mine{
+    background-image: url("../IMG/bomb.PNG");
+
+}
+
+.flag{
+    background-image: url("../IMG/flaga.PNG");
+}
+
+.showed{
+    background-image: none;
+}
+
+.question{
+    background-image: url("../IMG/pyt.png");
+}

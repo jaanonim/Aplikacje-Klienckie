@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea {
+            overflow: hidden;
+        }
+
+        #kolo {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 300px;">
+        <img src="IMG/guma.jpg" id="guma">
+    </div>
+
+    <input type="text" id="text" style="width: 30ch;">
+    <br>
+    <textarea rows="10" readonly id="area">
+... 6 punkt ...
+... 5 punkt ...
+... 4 punkt ...
+... 3 punkt ...
+... 2 punkt ...
+... 1 punkt ...
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+    <div style="height: 500px;">
+        <img src="IMG/Profilowe.png" width="50" id="kolo">
+    </div>
+    <script>
+
+        const min = 200
+        const max = 400
+        var guma_step = 50
+        var guma = document.getElementById("guma")
+        guma.width = (min + max) / 2
+
+
+
+        const input_width = 70
+        var text = document.getElementById("text")
+        var text_value = "Ciekawe czy uda mi sie to zrobić"
+        for (let i = 0; i < input_width - text_value.length; i++) {
+            text_value += " "
+        }
+
+
+
+        var area = document.getElementById("area")
+        var rows = area.innerHTML.split("\n")
+
+        function makeString(rows) {
+            let str = ""
+            for (let i = 0; i < rows.length; i++) {
+                str += rows[i] + "\n";
+            }
+            return str
+        }
+
+
+
+        const radius = 200
+        const center_x = 250
+        const center_y = 200
+        const speed = 0.1
+        var kolo = document.getElementById("kolo")
+        var n = 0
+
+        function setPos(x, y) {
+            kolo.style.left = x + "px"
+            kolo.style.top = y + "px"
+
+        }
+
+
+
+        function update() {
+            guma.width += guma_step
+            if (guma.width > max || guma.width < min) {
+                guma_step = -guma_step
+            }
+
+
+            let char = text_value[0]
+            text_value = text_value.substring(1)
+            text_value += char
+            text.value = text_value
+
+
+            let r = rows[rows.length - 1]
+            rows.pop(r)
+            rows.unshift(r)
+            area.innerHTML = makeString(rows)
+
+
+            setPos(radius * Math.cos(n) + center_x, radius * Math.sin(n) + center_y)
+            n += speed
+        }
+
+        setInterval(update, 100);
+
+
+    </script>
+
+</body>
+
+</html>

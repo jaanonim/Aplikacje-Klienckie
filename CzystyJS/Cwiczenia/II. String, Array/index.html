@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        function format_dna(input) {
+            var cod = get_codons(input)
+            var output = ""
+            const colors = {
+                ATG: "background-color: #0f0; font-weight: bold;",
+                TAA: "background-color: #ff0",
+                TAG: "background-color: #ff0",
+                TGA: "background-color: #ff0",
+            }
+            cod.forEach(element => {
+                var x = element
+                if (element in colors) {
+                    x = "<span style=\"" + colors[element] + "\">" + element + "</span>"
+                }
+                output += x + " "
+            });
+
+            return output
+        }
+
+        function get_codons(input) {
+            var list = []
+            for (let i = 0; i < input.length; i += 3) {
+                list.push(input.substr(i, 3))
+            }
+            return list
+        }
+
+        function validate(input) {
+            const allow_chars = "AGCT"
+            for (let i = 0; i < input.length; i++) {
+                console.log(allow_chars.search(input[i]), allow_chars, input[i])
+                if (allow_chars.search(input[i]) == -1) {
+                    return false
+                }
+            }
+            return true
+        }
+
+
+        //var dna = "cgaaggcgttcctcctttctaactcgcccgctggtgtctctgttgacgggtatcgtcttcaacggtgctactcaacagtcccactattcgcccgcgaatcacaattcccggagcaacgcattactactctgtgtctgctgatgacctttgatctatctttgcagccgcggtgaaaatgcagtattcgacactgttggtacagcaggttactttcagcccctatgttcgtacactaaatctgcagatagtcaactattggattgataaccggaacaaggctaacttgaccctggtcggacttgtgattgtgggcaaataccacacagtattcttttgatccacgtatcaaagggagcgagagtcaaccgtcgttaacattaactagggaggactagaacctctgtaatgctcgagtctctcactgtgcaacgggacggattaaagcggggaggcaaatatatcggtacatcacagtttctggacggacatccgacaacaatactacctgccgaccataatcttgaaacctactgatctgaacgagtagcctgggacatgcgctaaattctgtcaatgctgcaataattatcgtgcaatgagcacctctaagaagccagcgtgttataactaataagtgcaccaaatttgttcattcagaggtacgatcgcggagatctgtcggatcgcatatatatcttcgcaattattgaagcacggtggcattccgtaaccgcgaactgcctcgctgtatgaagggatcgaggtcctcgcgtgttgcacgagggacatatccacaggcgtgataatagttcgatgaccacagtatttacaccatttaccattctattgtcgttttcagcaagggaactggaaaaaatgctcgtgacgaagccggaagaaccgacagcgtacgaccatttgttcctttccgcgtggtaaggctccgcaggggaagaagctcgacgttgtagaccatcttacggccgcaggccatgtataatatgcctctcagcgtaactgattagtcagacaaagcgattgcccatctttcatattgtcggatattcacacatttgaagattgcaggcggaatactcctaggagtgcaagaaacgacatatgacctcgaattataatgtcactcgtctcccctatcgccggagtcatatccttgaccattttttgcttttgcttgataattacctacacactatccccggccccaatacagccctccgtgaaccttgagcagagtacatctcgttcgtgctgaagaacgtctttcgcagatactcagtccggctagggataggatacgcagagatatattagctatcttaccttaccgcaagtgccgttggaggcctacggggtgtttttcatagtggagagaattgagagacgacttgcacggggggtagtacgtccctcaatctgtacagcgccggcctgacattacgacataggaatgaaaacccgaacatgtgctttttttcaacctcgctctacagcctggtacagagcaaccttatttcctccgatcgacactagtcaacctccattcttaactttctgtagcctattgtaggcgggttgctgtggatcgtccataagatccgatcaccgaaatgtggagtctgtcaacgcagtttgcccacctcctcgtacaagatccggacgcagactaaacactttcagtttatgcgctcaacccacgggcaacttcatacccgagtccgatttgcaattcaggtccctagggagagcctccctcgtcgtggatggtccgcacggggtctgtgtcatctatccaacgagtcacagtggaaaggtgggcgaatcgcggaggtaaccgaattaccagtgattggattgctgacctcgattatcgaccgggaatgtacaccttgtgcgggaggcgagaccggagacaggcctggtgtttcctcttaatgcgacatgtgtaggttacatacccatccacattatactttcacacac"
+        var dna = "tgaactatgataataagtttaggatacgcaaaatgttaaagctatgttccctagtga"
+
+        dna = prompt("Podaj ciąg DNA", dna).toUpperCase()
+        console.log(validate(dna))
+
+        while (!validate(dna)) {
+            alert("Niepoprawny ciąg DNA")
+            dna = prompt("Podaj ciąg DNA", dna).toUpperCase()
+        }
+
+        var comp = ""
+        var map = {
+            A: "T",
+            T: "A",
+            G: "C",
+            C: "G",
+        }
+        for (let i = 0; i < dna.length; i++) {
+            if (dna[i] in map) {
+                comp += map[dna[i]]
+            }
+            else {
+                comp += dna[i]
+            }
+        }
+
+        document.write(dna)
+        document.write("<br>")
+        document.write(format_dna(dna))
+        document.write("<br>")
+        document.write("<br>")
+        document.write(format_dna(comp))
+        document.write("<br>")
+        document.write(comp)
+        document.write("<br>")
+        document.write("<br>")
+
+        var stats = {}
+        var list = get_codons(dna)
+
+        list.forEach(element => {
+            if (element in stats) {
+                stats[element]++
+            }
+            else {
+                stats[element] = 1
+            }
+        });
+
+        var items = Object.keys(stats).map(function (key) {
+            return [key, stats[key]];
+        });
+
+        items.sort(function (first, second) {
+            return second[1] - first[1];
+        });
+
+        for (let i = 0; i < parseInt(items.length / 5) + 1; i++) {
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            document.write("<div style=\"background-color: #" + randomColor + ";\">")
+            for (let j = 0; j < 5; j++) {
+                var index = j + (i * 5)
+                if (items.length <= j + (i * 5)) {
+                    break
+                }
+                document.write(items[index][0] + " - " + items[index][1] + "<br>")
+            }
+            document.write("</div>")
+
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
