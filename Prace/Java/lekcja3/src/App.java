@@ -1,9 +1,15 @@
+import java.util.Scanner;
+
 public class App {
 
     static String alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     public static void main(String[] args) throws Exception {
-        System.out.println(check("ABC"));
+        System.out.print("Napis do analizy: ");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        sc.close();
+        System.out.println("Brakujece znaki: " + check(input));
     }
 
     static String check(String str) {
