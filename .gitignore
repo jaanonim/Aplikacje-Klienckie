@@ -3,3 +3,4 @@ package-lock.json
 .deta
 .env
 .vscode
+creds.php
