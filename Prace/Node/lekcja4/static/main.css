@@ -1,0 +1,20 @@
+body{
+    background-color: #333;
+    color: #fff;
+}
+
+#box{
+    background-color: #aaa;
+    width: 300px;
+    height: 1.2rem;
+    padding: 0;
+    margin: 10px auto;
+}
+
+#progress{
+    background-color: #f00;
+    height: 1.2rem;
+    width: 0px;
+    text-align: center;
+}
+
