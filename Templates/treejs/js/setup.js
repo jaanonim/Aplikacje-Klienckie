@@ -9,6 +9,9 @@ export default function setup() {
 
     const axes = new THREE.AxesHelper(1000)
     scene.add(axes)
+	
+	const grid = new THREE.GridHelper(1000, 100);
+    scene.add(grid)
 
     const camera = new THREE.PerspectiveCamera(
         45,
