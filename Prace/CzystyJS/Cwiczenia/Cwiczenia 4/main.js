@@ -4,23 +4,43 @@ class Table {
         this.records = [];
         this.html = document.getElementById("table");
         this.inEdit = false;
-        this.generate();
+        this.get();
     }
 
-    get() {
-        this.records = this.records;
+    async get() {
+        let res = await fetch("/api.php?action=data")
+        let json = await res.json()
+        this.records = [];
+        this.html.innerHTML = '';
+        json.forEach(element => {
+            this.records.push(new Record(element.ID, element.country, element.nominal, element.nr, element.alloy, element.year, this));
+        });
     }
 
-    save() {
-        this.records = this.records;
+    async add(country, nominal, nr, alloy, year) {
+        let res = await fetch(`/api.php?action=add&country=${country}&nominal=${nominal}&nr=${nr}&alloy=${alloy}&year=${year}`)
+        let json = await res.json()
+        if (json.error !== null) {
+            console.error(json.error);
+        }
+        await this.get();
     }
 
-    add(country, nominal, nr, alloy, year) {
-        this.records.push(new Record(country, nominal, nr, alloy, year, this));
+    async delete(obj) {
+        let res = await fetch(`/api.php?action=delete&ID=${obj.id}`)
+        let json = await res.json()
+        if (json.error !== null) {
+            console.error(json.error);
+        }
+        await this.get();
     }
 
-    delete(obj) {
-        this.records.splice(this.records.indexOf(obj), 1);
+    async edit(obj) {
+        let res = await fetch(`/api.php?action=update&ID=${obj.id}&country=${obj.country}&nominal=${obj.nominal}&nr=${obj.nr}&alloy=${obj.alloy}&year=${obj.year}`)
+        let json = await res.json()
+        if (json.error !== null) {
+            console.error(json.error);
+        }
     }
 
     generate() {
@@ -59,21 +79,17 @@ class Form {
 
 class Dropdown {
     static data = {
-        alloys: [{
-            ID: 1,
-            name: "ok"
-        }, {
-            ID: 2,
-            name: "xd"
-        }],
-        countrys: [{
-            ID: 1,
-            name: "Albania"
-        }, {
-            ID: 2,
-            name: "Albania"
-        }]
+        alloys: [],
+        countrys: []
     };
+
+    static async getData() {
+        let res = await fetch("/api.php?action=alloys")
+        Dropdown.data.alloys = await res.json()
+
+        res = await fetch("/api.php?action=countrys")
+        Dropdown.data.countrys = await res.json()
+    }
 
     static generate(name, value, c) {
         let dropdown = document.createElement("select");
@@ -100,7 +116,8 @@ class Dropdown {
 }
 
 class Record {
-    constructor(country, nominal, nr, alloy, year, table) {
+    constructor(id, country, nominal, nr, alloy, year, table) {
+        this.id = id
         this.country = country;
         this.nominal = nominal;
         this.nr = nr;
@@ -189,8 +206,14 @@ class Record {
         this.nr = this.nrHTML.value;
         this.year = this.yearHTML.value;
 
+        this.table.edit(this);
+
         this.render();
     }
 }
 
-new Table();
+Dropdown.getData().then(() => {
+    new Table();
+}).catch((e) => {
+    console.error(e)
+})
