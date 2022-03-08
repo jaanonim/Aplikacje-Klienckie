@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/three.js"></script>
+    <script src="js/main.js" type="module"></script>
+    <style>
+        #add {
+            background-color: #00ff00;
+            width: 100px;
+            height: 25px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 100px;
+            text-align: center;
+            color: #fff;
+        }
+
+        #box {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 100px;
+        }
+
+        .color {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body style="margin: 0;">
+    <div id="root" style="overflow:hidden; margin: 0;"></div>
+    <div id="add">Dodaj</div>
+    <div id="box"></div>
+    <input type="range">
+</body>
+
+</html>
