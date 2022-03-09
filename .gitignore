@@ -6,3 +6,4 @@ package-lock.json
 creds.php
 .idea
 target
+data.db
