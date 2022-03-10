@@ -1,0 +1,21 @@
+body{
+    background-color: #333;
+    color: #fff;
+}
+
+input{
+    margin: 10px;
+}
+button{
+    margin: 10px;
+}
+
+#popup{
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(100,100,100,50);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
