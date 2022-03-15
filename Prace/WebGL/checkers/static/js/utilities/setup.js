@@ -7,7 +7,7 @@ export default function setup() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    $("#root").append(renderer.domElement);
+    document.getElementById("root").appendChild(renderer.domElement);
 
     const axes = new THREE.AxesHelper(1000)
     scene.add(axes)
