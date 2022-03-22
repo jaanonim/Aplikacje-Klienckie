@@ -14,7 +14,6 @@ export default class UiElement {
     }
 
     getElementById(id) {
-        console.log(document.getElementById(`${this.id}-${id}`))
         return document.getElementById(`${this.id}-${id}`)
     }
 }

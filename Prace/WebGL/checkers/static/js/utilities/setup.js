@@ -19,7 +19,7 @@ export default function setup() {
         10000
     );
 
-    camera.position.set(10, 10, 10)
+    camera.position.set(0, 20, 40)
     camera.lookAt(scene.position);
 
     function onWindowResize() {

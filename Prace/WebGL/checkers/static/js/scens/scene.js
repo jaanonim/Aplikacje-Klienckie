@@ -1,34 +1,14 @@
-import Plane from '../objects/plane.js';
+
+import Board from '../objects/board.js'
+import Object from '../utilities/object.js';
 
 
-export default class Scene {
-    constructor(scene) {
-        this.clock = new THREE.Clock();
-        this.scene = scene;
-        this.objcts = [];
-        this.start();
-    }
-
-    addObject(obj) {
-        if (obj.getObj() == null) {
-            setTimeout(() => {
-                this.addObject(obj)
-            }, 100)
-        }
-        else {
-            this.scene.add(obj.getObj());
-            this.objcts.push(obj);
-        }
+export default class Scene extends Object {
+    constructor() {
+        super()
     }
 
     start() {
-        this.addObject(new Plane(0, -10, 0));
-    }
-
-    update() {
-        const delta = this.clock.getDelta()
-        this.objcts.forEach(obj => {
-            obj.update(delta);
-        });
+        this.add(new Board());
     }
 }
