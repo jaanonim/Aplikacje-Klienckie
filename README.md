@@ -1,4 +1,5 @@
 # Aplikacje-Klienckie
+A repository for school lessons, client and server applications.
 
 ## Folders:
 
@@ -6,6 +7,18 @@
 -   Kartkowki - small tests
 -   Templates - templates for faster project setup
 -   Prace - projcets and homewroks
+
+## Topics:
+
+- JS
+- JQuery
+- Node.js
+- Express
+- Three.js
+- PHP
+- Java
+- Spark
+- Hosting: Heroku, DETA
 
 ---
 
