@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    r<input type="range" min="0" max="255" id="r">
+    g<input type="range" min="0" max="255" id="g">
+    b<input type="range" min="0" max="255" id="b">
+    a<input type="range" min="0" max="100" id="a">
+    <div style="width: 100px; height: 100px;" id="main">
+
+    </div>
+
+    <script>
+        const send = () => {
+            fetch("/send", {
+                method: "post",
+                body: JSON.stringify({
+                    r: document.getElementById("r").value,
+                    g: document.getElementById("g").value,
+                    b: document.getElementById("b").value,
+                    a: document.getElementById("a").value,
+                })
+            }).then(res => res.json()).then((data) => {
+                console.log(data);
+                document.getElementById("main").style.backgroundColor = `rgba(${data.r},${data.g},${data.b},${data.a})`
+            })
+        }
+
+        document.getElementById("r").oninput = () => {
+            send();
+        }
+        document.getElementById("g").oninput = () => {
+            send();
+        }
+        document.getElementById("b").oninput = () => {
+            send();
+        }
+        document.getElementById("a").oninput = () => {
+            send();
+        }
+
+
+    </script>
+</body>
+
+</html>

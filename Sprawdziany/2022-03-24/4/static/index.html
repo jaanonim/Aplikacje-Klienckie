@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" id="file">
+    <button id="btn">GET</button>
+    <div id="img"></div>
+
+
+    <script>
+        var path = "/upload/img.png";
+
+
+        const send = () => {
+            let body = new FormData()
+
+            body.append("file", document.getElementById("file").files[0])
+
+            fetch("/send", {
+                method: "post",
+                body: body,
+            }).then((data) => data.json()).then((d) => {
+                path = d.path
+                setTimeout(() => {
+                    document.getElementById("img").innerHTML = `<img src="${path}">`
+                }, 1000)
+            })
+
+
+        }
+
+        document.getElementById("btn").onclick = () => {
+            send();
+        }
+
+
+    </script>
+</body>
+
+</html>

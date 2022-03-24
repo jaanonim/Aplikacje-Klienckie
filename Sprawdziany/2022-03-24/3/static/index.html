@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="btn">GET</button>
+    <div id="dir" style="color: red;"></div>
+    <div id="file"></div>
+
+    <script>
+        const send = () => {
+            fetch("/send"
+            ).then(res => res.json()).then((data) => {
+                console.log(data);
+                document.getElementById("dir").innerText = ""
+                document.getElementById("file").innerText = ""
+                data.dirs.forEach(element => {
+                    document.getElementById("dir").innerHTML += element + "<br>";
+                });
+                data.files.forEach(element => {
+                    document.getElementById("file").innerHTML += element + "<br>";
+                });
+
+            })
+        }
+
+        document.getElementById("btn").onclick = () => {
+            send();
+        }
+
+
+    </script>
+</body>
+
+</html>
