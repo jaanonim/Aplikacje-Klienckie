@@ -17,18 +17,20 @@ class Message {
     constructor(author, message) {
         this.author = author;
         this.message = message;
+        this.timestamp = Date.now();
     }
 }
 
 app.get("/get", async (req, res) => {
-    const len = messages.length;
     while (true) {
         await new Promise(resolve => setTimeout(resolve, 1));
-        if (messages.length != len) {
-            break;
+        if (messages.length > 0) {
+            if (messages[messages.length - 1].timestamp > req.query.timestamp) {
+                break;
+            }
         }
     }
-    res.send(messages.splice(len));
+    res.send(messages.filter((e) => e.timestamp > req.query.timestamp));
 })
 
 

@@ -36,3 +36,48 @@ body{
     border-radius: 1rem;
     margin: 1rem;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0);
+
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.inputs{
+    width: 70%;
+    padding: 0.3rem;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+input{
+    width: calc(70% - 2rem);
+    height: 100%;
+    margin: 0.5rem;
+    display: inline-block;
+}
+button{
+    width: calc(30% - 2rem);
+    height: 100%;
+    display: inline-block;
+    margin: 0.5rem;
+}
+
+
