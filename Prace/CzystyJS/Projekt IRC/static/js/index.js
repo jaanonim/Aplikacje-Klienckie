@@ -1,6 +1,15 @@
-var AUTHOR = prompt("Podaj swoje imię: ");
-var COLOR = "#fff"
 import checkText from "./emoi.js"
+
+
+var AUTHOR = prompt("Podaj swoje imię: ");
+if (AUTHOR == null) {
+    AUTHOR = "Anonim";
+}
+let c = Math.floor(Math.random() * 16777215).toString(16);
+while (c.length < 6) {
+    c = "0" + c;
+}
+var COLOR = '#' + c
 
 class Chat {
     constructor() {
