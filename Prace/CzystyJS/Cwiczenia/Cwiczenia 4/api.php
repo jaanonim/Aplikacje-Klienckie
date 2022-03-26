@@ -35,16 +35,25 @@ if (isset($_GET['action'])) {
         $alloy = $_GET['alloy'];
         $year = $_GET['year'];
         $nominal = $_GET['nominal'];
-        $sql = "insert into data (nr, country, alloy, year, nominal) values ('$nr', '$country', '$alloy', '$year', '$nominal')";
-        if ($conn->query($sql) === TRUE) {
+        $sql = "insert into data (nr, country, alloy, year, nominal) values (?,?,?,?,?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssss", $nr, $country, $alloy, $year, $nominal);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result === TRUE) {
             echo '{"error": null}';
         } else {
             echo '{"error":"' . $sql . " " . $conn->error . '"}';
         }
     } elseif ($action == "delete") {
         $id = $_GET['ID'];
-        $sql = "DELETE FROM data WHERE ID=$id";
-        if ($conn->query($sql) === TRUE) {
+        $sql = "DELETE FROM data WHERE ID=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result === TRUE) {
             echo '{"error": null}';
         } else {
             echo '{"error":"' . $sql . " " . $conn->error . '"}';
@@ -56,8 +65,12 @@ if (isset($_GET['action'])) {
         $alloy = $_GET['alloy'];
         $year = $_GET['year'];
         $nominal = $_GET['nominal'];
-        $sql = "UPDATE data SET nr='$nr', country='$country', alloy='$alloy', year='$year', nominal='$nominal' WHERE ID=$id";
-        if ($conn->query($sql) === TRUE) {
+        $sql = "UPDATE data SET nr=?, country=?, alloy=?, year=?, nominal=? WHERE ID=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssss", $nr, $country, $alloy, $year, $nominal, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result === TRUE) {
             echo '{"error": null}';
         } else {
             echo '{"error":"' . $sql . " " . $conn->error . '"}';
