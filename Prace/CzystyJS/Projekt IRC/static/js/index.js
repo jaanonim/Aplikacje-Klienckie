@@ -1,5 +1,6 @@
 var AUTHOR = prompt("Podaj swoje imię: ");
 var COLOR = "#fff"
+import checkText from "./emoi.js"
 
 class Chat {
     constructor() {
@@ -32,6 +33,11 @@ class Chat {
 class Form {
     constructor() {
         document.querySelector('#send').onclick = this.submit.bind(this);
+        document.querySelector('#input').onkeydown = (e) => {
+            if (e.keyCode == 13) {
+                this.submit();
+            }
+        }
     }
 
     submit(e) {
@@ -49,7 +55,7 @@ class Form {
             },
             body: JSON.stringify({
                 author: `<span style="color: ${COLOR}">${AUTHOR}</span>`,
-                message
+                message: checkText(message)
             })
         })
     }
@@ -76,7 +82,7 @@ class Form {
             },
             body: JSON.stringify({
                 author: `<span style="color: #f00; font-weight: bold;">SYSTEM</span>`,
-                message: message,
+                message: checkText(message),
             })
         })
     }
