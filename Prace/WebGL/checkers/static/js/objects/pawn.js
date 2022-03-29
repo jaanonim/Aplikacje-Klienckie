@@ -10,10 +10,21 @@ export default class Field extends Mesh {
             map: texture,
         })
         super(geometry, material);
+        this.color = color;
+
         this.position.setY(1);
 
         this.position.setX(x);
         this.position.setZ(y);
+
+    }
+
+    onClick() {
+        this.material.color.setHex(0xff0000);
+    }
+
+    unClick() {
+        this.material.color.setHex(this.color);
     }
 
 }

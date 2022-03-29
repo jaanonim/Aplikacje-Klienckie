@@ -29,4 +29,15 @@ async function getPlayers() {
     }
 }
 
-export { join, getPlayers }
+async function getWho() {
+    try {
+        const res = await fetch(`${API_URL}/who`)
+        const json = await res.json();
+        return json
+    }
+    catch (e) {
+        return { message: e, sucess: false }
+    }
+}
+
+export { join, getPlayers, getWho }

@@ -1,17 +1,37 @@
 import Popup from "./popup.js";
 import UiElement from "./uiElement.js"
-import { join, getPlayers } from "../api.js"
+import { join, getPlayers, getWho } from "../api.js"
 import GameManager from "../game.js";
 
 export default class UiControler {
     constructor() {
-        this.waitScreen = new WaitScreen()
+        this.waitScreen = new WaitScreen(() => {
+            this.checkWhoL();
+        })
         this.joinScreen = new JoinScreen(() => {
             this.waitScreen.show();
             this.waitScreen.check();
         })
+        this.opponentScreen = new OpponentScreen()
         this.popup = new Popup()
         this.joinScreen.show()
+    }
+
+    async checkWhoL() {
+        const data = await getWho()
+        console.log(data)
+        let nick;
+        if (data.player)
+            nick = data.player.nick
+        let isYourTurn = GameManager.getState("nick") === nick
+        GameManager.setState("isYourTurn", isYourTurn)
+        if (isYourTurn) {
+            this.opponentScreen.hide();
+        }
+        else {
+            this.opponentScreen.show();
+        }
+        setTimeout(() => { this.checkWhoL(); }, 500)
     }
 }
 
@@ -42,8 +62,9 @@ class JoinScreen extends UiElement {
 }
 
 class WaitScreen extends UiElement {
-    constructor() {
+    constructor(next) {
         super("wait");
+        this.next = next;
     }
 
     check() {
@@ -51,8 +72,9 @@ class WaitScreen extends UiElement {
             if (data.sucess) {
                 if (data.players.length == 2) {
                     const player = data.players.filter((e) => GameManager.getState("nick") === e.nick)[0]
-                    GameManager.setState("color", player.isWhite)
+                    GameManager.setState("color", player.isWhite);
                     this.hide();
+                    this.next();
                     return;
                 }
             }
@@ -60,3 +82,10 @@ class WaitScreen extends UiElement {
         })
     }
 }
+
+class OpponentScreen extends UiElement {
+    constructor() {
+        super("opponent")
+    }
+}
+
