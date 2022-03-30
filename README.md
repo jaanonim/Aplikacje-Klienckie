@@ -1,5 +1,13 @@
 # Aplikacje-Klienckie
+
 A repository for school lessons, client and server applications.
+
+## Most interesting projects
+
+-   **anonim-server** (`Prace\Node\anonim-server`)\
+     Simple express like http server written on top of clean node.js. Published as npm package.
+-   **checkers** (`Prace\WebGL\checkers`)\
+     3D chekers game written using three.js and express as backend.
 
 ## Folders:
 
@@ -10,15 +18,15 @@ A repository for school lessons, client and server applications.
 
 ## Topics:
 
-- JS
-- JQuery
-- Node.js
-- Express
-- Three.js
-- PHP
-- Java
-- Spark
-- Hosting: Heroku, DETA
+-   JS
+-   JQuery
+-   Node.js
+-   Express
+-   Three.js
+-   PHP
+-   Java
+-   Spark
+-   Hosting: Heroku, DETA
 
 ---
 
