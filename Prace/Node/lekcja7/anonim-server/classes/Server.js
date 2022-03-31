@@ -21,12 +21,14 @@ module.exports = class Server {
             - static:string
         */
 
-        this.server = createServer(this.config, this.endpoints);
+
         this.root = new Route();
     }
 
     listen() {
-        this.root.route("");
+        this.endpoints = this.root.translate("");
+        console.log(this.endpoints);
+        this.server = createServer(this.config, this.endpoints);
         this.server.listen(this.config.port, () => {
             logger.info(`Server is listening on http://localhost:${this.config.port}`);
         });
