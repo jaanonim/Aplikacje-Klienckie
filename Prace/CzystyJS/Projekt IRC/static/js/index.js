@@ -1,4 +1,4 @@
-import checkText from "./emoi.js"
+import checkText from "./emoi.js";
 
 
 var AUTHOR = prompt("Podaj swoje imię: ");
@@ -25,16 +25,19 @@ class Chat {
         this.messages.push(m);
     }
 
-    getMessages() {
-        fetch(`/get?timestamp=${this.messages[this.messages.length-1]?this.messages[this.messages.length-1].timestamp:Date.now()}`).then(res => res.json()).then(res => {
+    async getMessages() {
+        try {
+            let res = await fetch(`/get?timestamp=${this.messages[this.messages.length-1]?this.messages[this.messages.length-1].timestamp:Date.now()}`)
+            res = await res.json();
             res.forEach(m => {
                 this.addMessage(m.author, m.message, m.timestamp);
             });
             this.getMessages();
-        }).catch(err => {
+        } catch (err) {
             console.log(err);
             this.getMessages();
-        });
+        }
+
     }
 }
 
@@ -49,7 +52,7 @@ class Form {
         }
     }
 
-    submit(e) {
+    async submit(e) {
         const message = document.querySelector('#input').value;
         document.querySelector('#input').value = "";
         if (message.length == 0) return;
@@ -57,7 +60,7 @@ class Form {
             this.command(message);
             return;
         }
-        fetch('/post', {
+        await fetch('/post', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,8 +86,8 @@ class Form {
         }
     }
 
-    osMessage(message) {
-        fetch('/post', {
+    async osMessage(message) {
+        await fetch('/post', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
