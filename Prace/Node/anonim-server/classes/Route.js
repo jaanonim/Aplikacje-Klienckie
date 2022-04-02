@@ -25,7 +25,9 @@ class Route {
     }
 
     route(url, router) {
-        this.endpoints.push(router.translate(url));
+        router.translate(url).forEach(element => {
+            this.endpoints.push(element);
+        });
     }
 
     translate(url) {
