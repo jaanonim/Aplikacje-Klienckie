@@ -19,7 +19,6 @@ export default class UiControler {
 
     async checkWhoL() {
         const data = await getWho()
-        console.log(data)
         let nick;
         if (data.player)
             nick = data.player.nick

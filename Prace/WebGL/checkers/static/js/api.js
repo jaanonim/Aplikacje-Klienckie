@@ -1,3 +1,5 @@
+import GameManager from "./game.js";
+
 const API_URL = "/api"
 
 async function join(nick) {
@@ -40,4 +42,21 @@ async function getWho() {
     }
 }
 
-export { join, getPlayers, getWho }
+async function move(from,to){
+    try {
+        const res = await fetch(`${API_URL}/move`, {
+            method: "post",
+            body: JSON.stringify({ from,to, nick: GameManager.getState("nick")}),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        const json = await res.json();
+        return json
+    }
+    catch (e) {
+        return { message: e, sucess: false }
+    }
+}
+
+export { join, getPlayers, getWho,move }

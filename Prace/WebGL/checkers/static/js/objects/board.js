@@ -27,10 +27,10 @@ export default class Board extends Object {
         for (let x = 0; x < MAP.length; x++) {
             for (let y = 0; y < MAP[x].length; y++) {
                 if (MAP[x][y]) {
-                    this.add(new Field(x * Board.FIELD_SIZE, y * Board.FIELD_SIZE, 0x666666));
+                    this.add(new Field(x, y, Board.FIELD_SIZE, 0x666666));
                 }
                 else {
-                    this.add(new Field(x * Board.FIELD_SIZE, y * Board.FIELD_SIZE, 0xffffff));
+                    this.add(new Field(x, y, Board.FIELD_SIZE, 0xffffff));
                 }
             }
         }
@@ -58,17 +58,16 @@ export default class Board extends Object {
         for (let x = 0; x < SIZE; x++) {
             for (let y = 0; y < SIZE; y++) {
                 if (PAWNS[x][y] == -1) {
-                    this.add(new Pawn(y * Board.FIELD_SIZE, x * Board.FIELD_SIZE, c1));
+                    this.add(new Pawn(y, x, Board.FIELD_SIZE, c1,true));
                 }
                 else if (PAWNS[x][y] == 1) {
-                    this.add(new Pawn(y * Board.FIELD_SIZE, x * Board.FIELD_SIZE, c2));
+                    this.add(new Pawn(y, x, Board.FIELD_SIZE, c2,false));
                 }
             }
         }
     }
 
     update() {
-
         const C1 = 0xdddddd;
         const C2 = 0x444444;
         const color = GameManager.getState("color");

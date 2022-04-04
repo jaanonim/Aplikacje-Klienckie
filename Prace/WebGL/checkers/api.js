@@ -4,7 +4,7 @@ const router = express.Router();
 var PLAYERS = []
 var MAP = null
 var SIZE = 8;
-var PLAYER_ID = 0;
+var PLAYER_ID = 1;
 var nextPlayer = () => {
     PLAYER_ID = PLAYER_ID === 1 ? 0 : 1
 }
@@ -151,10 +151,11 @@ router.post("/move", (req, res) => {
     const from = req.body.from
     const to = req.body.to
     const nick = req.body.nick;
-    if (!MAP.checkMove(from.x, from.y, to.x, to.y, nick)) {
+    if (MAP.checkMove(from.x, from.y, to.x, to.y, nick)) {
         res.send({ sucess: false })
         return;
     }
+
     MAP.move(from.x, from.y, to.x, to.y)
     nextPlayer();
     res.send({ sucess: true })

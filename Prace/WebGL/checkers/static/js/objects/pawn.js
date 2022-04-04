@@ -1,7 +1,8 @@
 import Mesh from "../utilities/mesh.js";
 
-export default class Field extends Mesh {
-    constructor(x, y, color) {
+export default class Pawn extends Mesh {
+    constructor(x, y,size,color, isYours) {
+
         const texture = new THREE.TextureLoader().load("/img/wood.jpeg");
         const geometry = new THREE.CylinderGeometry(2, 2, 1, 20)
         const material = new THREE.MeshBasicMaterial({
@@ -11,11 +12,13 @@ export default class Field extends Mesh {
         })
         super(geometry, material);
         this.color = color;
+        this.isYours = isYours;
 
         this.position.setY(1);
 
-        this.position.setX(x);
-        this.position.setZ(y);
+        this.position.setX(x*size);
+        this.position.setZ(y*size);
+        this.boardPos={x:x,y:y};
 
     }
 
