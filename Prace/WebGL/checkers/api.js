@@ -5,8 +5,10 @@ var PLAYERS = []
 var MAP = null
 var SIZE = 8;
 var PLAYER_ID = 1;
+var TIME = 0;
 var nextPlayer = () => {
     PLAYER_ID = PLAYER_ID === 1 ? 0 : 1
+    TIME = Date.now()
 }
 
 class Map {
@@ -29,18 +31,22 @@ class Map {
         for (let x = 0; x < SIZE; x++) {
             for (let y = 0; y < SIZE; y++) {
                 if (PAWNS[x][y] == -1) {
-                    this.pawns.push(new Pawn(x, y, this, PLAYERS[0].nick))
+                    this.pawns.push(new Pawn(y, x, this, PLAYERS[1].nick))
                 }
                 else if (PAWNS[x][y] == 1) {
-                    this.pawns.push(new Pawn(x, y, this, PLAYERS[1].nick))
+                    this.pawns.push(new Pawn(y, x, this, PLAYERS[0].nick))
                 }
             }
         }
 
     }
 
+    removePawn(pawn) {
+        this.pawns.splice(this.pawns.indexOf(pawn), 1);
+    }
+
     getPawn(x, y) {
-        let p = this.pawns.filter((ele) => ele.x === x || ele.y === y)
+        let p = this.pawns.filter((ele) => ele.x === x && ele.y === y)
         if (p.length == 1) {
             return p[0];
         }
@@ -68,6 +74,13 @@ class Map {
 }
 
 class Pawn {
+    static mask = [
+        { x: 1, y: 1 },
+        { x: -1, y: 1 },
+        { x: -1, y: -1 },
+        { x: 1, y: -1 },
+    ]
+
     constructor(x, y, map, player) {
         this.x = x;
         this.y = y;
@@ -76,16 +89,34 @@ class Pawn {
     }
 
     checkMove(x, y) {
-        if (this.map.getPawn(x, y) != null) {
+        if (this.map.getPawn(x, y) != null)
             return false;
+        if (!(x >= 0 && x < SIZE && y >= 0 && y < SIZE))
+            return false;
+        if (Math.abs(this.x - x) == 2 || Math.abs(this.y - y) == 2) {
+            let newX = this.x - (this.x - x) / 2;
+            let newY = this.y - (this.y - y) / 2;
+
+            const enemy = this.map.getPawn(newX, newY)
+            if (enemy && enemy.player !== this.player) return true
+            else return false
         }
-        if (!(x >= 0 && x < SIZE && y >= 0 && y < SIZE)) {
+        if (Math.abs(this.x - x) != 1 || Math.abs(this.y - y) != 1) {
             return false;
         }
         return true;
     }
 
     move(x, y) {
+        if (Math.abs(this.x - x) == 2 || Math.abs(this.y - y) == 2) {
+            let newX = this.x - (this.x - x) / 2;
+            let newY = this.y - (this.y - y) / 2;
+
+            const enemy = this.map.getPawn(newX, newY)
+            if (enemy && enemy.player !== this.player) {
+                MAP.removePawn(enemy);
+            }
+        }
         this.x = x;
         this.y = y;
     }
@@ -132,6 +163,7 @@ router.post("/join", (req, res) => {
     }
     PLAYERS.push(new Player(nick, PLAYERS.length == 1));
     if (PLAYERS.length == 2) MAP = new Map();
+    TIME = Date.now();
     res.send({ message: "Player added to game", sucess: true })
 })
 
@@ -144,21 +176,25 @@ router.get("/map", (req, res) => {
 })
 
 router.get("/who", (req, res) => {
-    res.send({ player: PLAYERS[PLAYER_ID], sucess: true })
+    if (Date.now() - TIME > 30000) {
+        nextPlayer();
+    }
+    res.send({ player: PLAYERS[PLAYER_ID], time: parseInt(30 - (Date.now() - TIME) / 1000), sucess: true })
 })
 
 router.post("/move", (req, res) => {
+    console.log(req.body)
     const from = req.body.from
     const to = req.body.to
     const nick = req.body.nick;
-    if (MAP.checkMove(from.x, from.y, to.x, to.y, nick)) {
+    if (!MAP.checkMove(from.x, from.y, to.x, to.y, nick)) {
         res.send({ sucess: false })
         return;
     }
 
     MAP.move(from.x, from.y, to.x, to.y)
     nextPlayer();
-    res.send({ sucess: true })
+    res.send({ map: MAP.toMap(), sucess: true })
 
 })
 

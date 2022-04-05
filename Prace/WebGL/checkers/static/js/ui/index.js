@@ -15,10 +15,15 @@ export default class UiControler {
         this.opponentScreen = new OpponentScreen()
         this.popup = new Popup()
         this.joinScreen.show()
+        this.lastTime = -1;
     }
 
     async checkWhoL() {
         const data = await getWho()
+        if (data.time !== this.lastTime) {
+            this.lastTime = data.time
+            Popup.show(`${data.time}s`);
+        }
         let nick;
         if (data.player)
             nick = data.player.nick

@@ -42,11 +42,11 @@ async function getWho() {
     }
 }
 
-async function move(from,to){
+async function move(from, to) {
     try {
         const res = await fetch(`${API_URL}/move`, {
             method: "post",
-            body: JSON.stringify({ from,to, nick: GameManager.getState("nick")}),
+            body: JSON.stringify({ from, to, nick: GameManager.getState("nick") }),
             headers: {
                 "Content-Type": "application/json",
             }
@@ -59,4 +59,16 @@ async function move(from,to){
     }
 }
 
-export { join, getPlayers, getWho,move }
+async function getMap() {
+    try {
+        const res = await fetch(`${API_URL}/map`)
+        const json = await res.json();
+        return json
+    }
+    catch (e) {
+        return { message: e, sucess: false }
+    }
+}
+
+
+export { join, getPlayers, getWho, move, getMap }
