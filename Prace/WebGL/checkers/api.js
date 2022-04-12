@@ -261,6 +261,7 @@ router.put("/reset", (req, res) => {
 	TIME = 0;
 	END = false;
 	LAST_MOVE = null;
+	res.send({ sucess: true });
 });
 
 module.exports = router;

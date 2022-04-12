@@ -29,6 +29,7 @@ export default class UiControler {
 
 		if (data.end) {
 			GameManager.setState("isEnd", true);
+			GameManager.setState("isYourTurn", false);
 			if (isYourTurn) {
 				this.winScreen.show();
 			} else {

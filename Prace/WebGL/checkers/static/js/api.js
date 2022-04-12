@@ -80,7 +80,7 @@ async function getLastMove() {
 
 async function reset() {
 	try {
-		const res = await fetch(`${API_URL}/reset`, { method: "put" });
+		await fetch(`${API_URL}/reset`, { method: "put" });
 		return true;
 	} catch (e) {
 		return false;
