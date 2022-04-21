@@ -1,25 +1,70 @@
-body{
+body {
     background-color: #333;
     color: #fff;
+    font-size: 20px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-input{
-    margin: 10px;
-}
-button{
-    margin: 10px;
+header {
+    background-color: rgb(236, 233, 22);
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2rem;
 }
 
-#popup{
+header h1 {
+    margin: auto;
+    padding: 0;
+}
+header a {
+    color: #fff;
+    display: inline-block;
+    border: #fff 1px solid;
+    padding: 0.5rem;
+    text-decoration: none;
+    margin: 0.5rem;
+}
+header a:hover {
+    background-color: rgb(185, 183, 16);
+}
+
+input,
+select {
+    margin: 10px;
+    padding: 5px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 20px;
+    width: 200px;
+    background-color: rgb(236, 233, 22);
+}
+
+button:hover {
+    background-color: rgb(185, 183, 16);
+}
+
+#popup {
     display: none;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(100,100,100,50);
+    background-color: rgba(100, 100, 100, 0.5);
     position: fixed;
     top: 0;
     left: 0;
 }
 
-td{
+td {
     border: 1px #fff solid;
+    padding: 0 5px;
+}
+
+table {
+    margin: auto;
 }

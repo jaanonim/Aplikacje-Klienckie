@@ -3,15 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Index</title>
     <script src="index.js" defer></script>
     <link href="main.css" rel="stylesheet">
 </head>
 
 <body>
-    model:
+    <header>
+        <h1>Index</h1>
+        <a href="/index.html">Index</a>
+        <a href="/admin.html">Admin</a>
+        <a href="/search.html">Search</a>
+        <a href="/update.html">Update</a>
+    </header>
+
+    Model:
     <input id="model"><br>
-    year:
+    Year:
     <select id="year">
         <option value="2001">2001</option>
         <option value="2002">2002</option>
@@ -28,48 +36,7 @@
     <input type="checkbox" id="br"><br>
     Color:
     <input type="color" id="color"><br>
-    <button id="btn">Send</button><br><br>
-    <button id="gen">Generate</button>
-
-    <h2>Invoices</h2>
-
-    <select id="yearI">
-        <option value="2001">2001</option>
-        <option value="2002">2002</option>
-        <option value="2003">2003</option>
-        <option value="2004">2004</option>
-        <option value="2005">2005</option>
-        <option value="2006">2006</option>
-        <option value="2007">2007</option>
-    </select><br>
-    <input id="titleI"><br>
-    <input id="buyerI"><br>
-    <input id="sellerI"><br>
-    <button id="geninvoice">Generate Invoice</button>
-
-    <h2>Data</h2>
-
-
-    <table id="table"></table>
-
-
-
-
-    <div id="popup">
-        model:
-        <input id="model"><br>
-        year:
-        <select id="year">
-            <option value="2001">2001</option>
-            <option value="2002">2002</option>
-            <option value="2003">2003</option>
-            <option value="2004">2004</option>
-            <option value="2005">2005</option>
-            <option value="2006">2006</option>
-            <option value="2007">2007</option>
-        </select><br>
-        <button id="update">Update</button>
-    </div>
+    <button id="btn">Send</button>
 </body>
 
 </html>
