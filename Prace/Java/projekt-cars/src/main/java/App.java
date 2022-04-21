@@ -9,7 +9,9 @@ public class App {
     public static void main(String[] args) {
         port(getHerokuPort());
         staticFileLocation("public");
+
         Api api = new Api();
+        
         post("/add", (req, res) -> api.add(req, res));
         get("/get", (req, res) -> api.get(req, res));
         delete("/delete", (req, res) -> api.delete(req, res));
