@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.fasterxml.uuid.Generators;
-import com.itextpdf.text.pdf.fonts.cmaps.CMapParserEx;
 
 public class Car {
     private UUID uuid;
