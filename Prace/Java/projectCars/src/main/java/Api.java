@@ -1,15 +1,23 @@
-import com.fasterxml.uuid.Generators;
-import com.google.gson.Gson;
-import com.itextpdf.text.DocumentException;
-import spark.Request;
-import spark.Response;
-
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.fasterxml.uuid.Generators;
+import com.google.gson.Gson;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import spark.Request;
+import spark.Response;
 
 public class Api {
     private ArrayList<Car> cars = new ArrayList<Car>();
@@ -34,6 +42,7 @@ public class Api {
                 Car copy = c.copy();
                 copy.setModel(obj.getModel());
                 copy.setYear(obj.getYear());
+                copy.setHasInvoice(false);
                 return copy;
             } else {
                 return c;
@@ -53,6 +62,50 @@ public class Api {
             cars.add(Car.randomCar());
         }
         return "ok";
+    }
+
+    public String genOneInvoice(Request req, Response res) {
+        String uuid = req.queryParams("uuid");
+        for (int i = 0; i < cars.size(); i++) {
+            Car currentCar = cars.get(i);
+            if (currentCar.getUuid().toString().equals(uuid)) {
+                try {
+                    Document document = new Document();
+                    String path = "invoices/" + uuid + ".pdf";
+                    PdfWriter.getInstance(document, new FileOutputStream(path));
+
+                    document.open();
+
+                    Font font16 = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+                    Font font20 = FontFactory.getFont(FontFactory.COURIER, 20, BaseColor.BLACK);
+                    Font font24 = FontFactory.getFont(FontFactory.COURIER, 24, BaseColor.BLACK);
+
+                    Paragraph p = new Paragraph("Fakturka dla: \n" + uuid, font20);
+                    document.add(p);
+
+                    Paragraph p1 = new Paragraph("Model: " + currentCar.getModel(), font24);
+                    document.add(p1);
+
+                    Paragraph p2 = new Paragraph(
+                            "Color: " + currentCar.getColor() + "\n" +
+                                    "Year: " + currentCar.getYear() + "\n" +
+                                    "Airbags: " + currentCar.getAirbags() + "\n" +
+                                    "Price: " + currentCar.getPrice() + "\n"
+
+                            , font16);
+                    document.add(p2);
+
+                    document.close();
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                    return "not ok";
+                }
+                currentCar.setHasInvoice(true);
+                return "ok";
+            }
+        }
+        return "not ok";
     }
 
     public String genInvoice(Request req, Response res) {

@@ -13,6 +13,15 @@ public class Car {
     private Float price;
     private int tax;
     private CustomDate date;
+    private boolean hasInvoice;
+
+    public boolean isHasInvoice() {
+        return hasInvoice;
+    }
+
+    public void setHasInvoice(boolean hasInvoice) {
+        this.hasInvoice = hasInvoice;
+    }
 
     public CustomDate getDate() {
         return date;
@@ -87,6 +96,7 @@ public class Car {
                 ", \"airbags\":" + airbags +
                 ", \"color\":\"" + color + '\"' +
                 ", \"price\":\"" + price + '\"' +
+                ", \"hasInvoice\":\"" + hasInvoice + '\"' +
                 ", \"date\":" + date +
                 '}';
     }
@@ -99,6 +109,7 @@ public class Car {
         copy.setUuid(this.uuid);
         copy.setYear(this.year);
         copy.setPrice(this.price);
+        copy.setHasInvoice(this.hasInvoice);
         copy.setTax(tax);
         copy.setDate(date);
         return copy;
@@ -115,6 +126,7 @@ public class Car {
         copy.setModel(model[r.nextInt(model.length)]);
         copy.setColor(color[r.nextInt(color.length)]);
         copy.setUuid(uuid);
+        copy.setHasInvoice(false);
         copy.setTax(tax[r.nextInt(tax.length)]);
         copy.setYear(year[r.nextInt(year.length)]);
         ArrayList<Airbag> airbags = new ArrayList<Airbag>();
