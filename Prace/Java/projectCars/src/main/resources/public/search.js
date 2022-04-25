@@ -1,7 +1,7 @@
-document.getElementById("gen").onclick = async () => {
+/*document.getElementById("gen").onclick = async () => {
     await fetch(`/generate`, { method: "put" });
     getData();
-};
+};*/
 
 document.getElementById("geninvoice").onclick = async () => {
     const data = {
@@ -15,5 +15,5 @@ document.getElementById("geninvoice").onclick = async () => {
         strs.push(`${key}=${value}`);
     }
 
-    await fetch(`/invoice/generate?${strs.join("&")}`, { method: "put" });
+    await fetch(`/invoice?${strs.join("&")}`, { method: "put" });
 };
