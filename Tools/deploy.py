@@ -15,7 +15,7 @@ os.system(f"heroku create -a {name} --buildpack {buildpack}")
 os.system(
     f"heroku buildpacks:add -a {name} -i 1 https://github.com/lstoll/heroku-buildpack-monorepo"
 )
-os.system(f"heroku config:set -a {name} APP_BASE={path}")
+os.system(f"heroku config:set -a {name} APP_BASE=\"{path}\"")
 os.system(f"git push https://git.heroku.com/{name}.git HEAD:master")
 
 print("Creating deploy file in apps")
