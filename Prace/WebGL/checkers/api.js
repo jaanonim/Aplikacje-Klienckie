@@ -275,11 +275,16 @@ router.get("/map", (req, res) => {
 });
 
 router.get("/lastMove", (req, res) => {
-    if (LAST_MOVE) res.send({ lastMove: LAST_MOVE, sucess: true });
+    if (LAST_MOVE != null) res.send({ lastMove: LAST_MOVE, sucess: true });
     else res.send({ lastMove: {}, sucess: false });
 });
 
 router.get("/who", (req, res) => {
+    if (PLAYERS.length !== 2) {
+        res.send({ sucess: false });
+        return;
+    }
+
     if (Date.now() - TIME > TURN_TIME * 1000) {
         END = true;
         nextPlayer();
@@ -326,7 +331,6 @@ router.post("/move", (req, res) => {
 router.put("/reset", (req, res) => {
     PLAYERS = [];
     MAP = null;
-    SIZE = 8;
     PLAYER_ID = 1;
     TIME = 0;
     END = false;
