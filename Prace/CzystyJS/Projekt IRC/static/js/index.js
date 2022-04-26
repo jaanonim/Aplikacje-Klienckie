@@ -98,7 +98,7 @@ class Form {
             );
         } else if (message.startsWith("/help")) {
             this.osMessage(
-                `Jak zwykle ${AUTHOR} nie zna komend.\n\t Oto przypomninie: \n\t  /color <kolor> - ustawia kolor niku \n\t  /nick <imie> - zmienia imie niku \n\t  /random - wyswietla losowa liczbe \n\t  /joke - wyswietla losowy dowcip \n\t  /sing - nie wpisuj tego \n\t and more...`
+                `Jak zwykle ${AUTHOR} nie zna komend.\n\t Oto przypomninie: \n\t  /color <kolor> - ustawia kolor niku \n\t  /nick <imie> - zmienia imie niku \n\t  /random - wyswietla losowa liczbe \n\t  /joke - wyswietla losowy dowcip \n\t  /sing - nie wpisuj tego \n\t  and more...`
             );
         } else if (message.startsWith("/godmode")) {
             this.osMessage("ED7BA470-8E54-465E-825C-99712043E01C");
