@@ -15,6 +15,7 @@ A repository for school lessons, client and server applications.
 -   Kartkowki - small tests
 -   Templates - templates for faster project setup
 -   Prace - projcets and homewroks
+-   Tools - some usefull tool for managing this repo
 
 ## Topics:
 
@@ -36,6 +37,8 @@ A repository for school lessons, client and server applications.
     For node.js it's:
 
         web: npm start
+
+Then use `deploy` tool or do this manualy:
 
 2.  Create heroku app (this buildpack is for node.js)
 
