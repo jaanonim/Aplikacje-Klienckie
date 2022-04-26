@@ -1,15 +1,15 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-h1{
+h1 {
     margin: 1rem 0;
     height: auto;
     width: 100%;
     text-align: center;
 }
 
-body{
+body {
     background-color: #333;
     color: #fff;
     width: 100vw;
@@ -17,7 +17,7 @@ body{
     overflow: hidden;
 }
 
-#main{
+#main {
     width: 70%;
     height: 70%;
     margin: 2rem auto;
@@ -28,56 +28,53 @@ body{
     overflow-x: hidden;
 }
 
-.message{
+.message {
     width: calc(100% - 2rem);
     height: auto;
     padding: 1rem;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     margin: 1rem;
+    white-space: pre;
 }
 
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0);
+}
 
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 5px;
+}
 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: #555;
-  }
+}
 
-.inputs{
+.inputs {
     width: 70%;
     padding: 0.3rem;
     margin: 1rem auto;
     text-align: center;
 }
 
-input{
+input {
     width: calc(70% - 2rem);
     height: 100%;
     margin: 0.5rem;
     display: inline-block;
 }
-button{
+button {
     width: calc(30% - 2rem);
     height: 100%;
     display: inline-block;
     margin: 0.5rem;
 }
-
-
