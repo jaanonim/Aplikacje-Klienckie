@@ -110,7 +110,12 @@ public class Api {
                     try {
                         Image img = Image
                                 .getInstance("src/main/resources/public/images/" + currentCar.getModel() + ".png");
+                        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                                - document.rightMargin() - 0) / img.getWidth()) * 100;
+
+                        img.scalePercent(scaler);
                         document.add(img);
+
                     } catch (Exception e) {
                         // TODO: handle exception
                     }
