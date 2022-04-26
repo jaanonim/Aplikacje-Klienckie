@@ -1,4 +1,5 @@
-const { Controler, ModelControler } = require("./Class");
+const { Controler, ModelControler, MongoControler } = require("./Class");
+const { MongoDb } = require("../Model/MongoDb");
 
 class ControlerFactory {
     static Controler = Controler;
@@ -11,7 +12,11 @@ class ControlerFactory {
     create(obj) {
         let c = class extends Controler {};
         if (this.model) {
-            c = class extends ModelControler {};
+            if (this.model.model === "MongoDb") {
+                c = class extends MongoControler {};
+            } else {
+                c = class extends ModelControler {};
+            }
             c.Model = this.model;
         }
         Object.defineProperty(c, "name", { value: this.name });

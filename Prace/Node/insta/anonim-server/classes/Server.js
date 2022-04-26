@@ -11,12 +11,16 @@ module.exports = class Server {
             jsonParser: false,
             port: process.env.PORT || 3000,
             static: "./static",
+            formidable: {
+                uploadDir: "./static/uploads",
+            },
         };
         /*
             Options for config:
             - jsonParser:bool
             - port:number
             - static:string
+            - formidable:object
         */
 
         this.root = new Route();

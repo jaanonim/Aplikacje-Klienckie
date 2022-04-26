@@ -17,24 +17,44 @@ class Controler {
 }
 
 class ModelControler extends Controler {
-    static find(ctx) {
+    static async find(ctx) {
         ctx.sendJson(this.Model.find((v) => v.id == ctx.getUrlParam("id")));
     }
-    static findAll(ctx) {
+    static async findAll(ctx) {
         ctx.sendJson(this.Model.findAll((e) => true));
     }
-    static create(ctx) {
+    static async create(ctx) {
         ctx.sendJson(this.Model.create(ctx.getBody()));
     }
-    static update(ctx) {
+    static async update(ctx) {
         ctx.sendJson(
             this.Model.update((e) => v.id == ctx.getUrlParam("id")),
             ctx.getBody()
         );
     }
-    static delete(ctx) {
+    static async delete(ctx) {
         ctx.sendJson(this.Model.delete((v) => v.id == ctx.getUrlParam("id")));
     }
 }
 
-module.exports = { Controler, ModelControler };
+class MongoControler extends ModelControler {
+    static async find(ctx) {
+        ctx.sendJson(await this.Model.find(ctx.getUrlParam("id")));
+    }
+    static async findAll(ctx) {
+        ctx.sendJson(await this.Model.findAll({}));
+    }
+    static async create(ctx) {
+        ctx.sendJson(await this.Model.create(ctx.getBody()));
+    }
+    static async update(ctx) {
+        ctx.sendJson(
+            await this.Model.update(ctx.getUrlParam("id"), ctx.getBody())
+        );
+    }
+    static async delete(ctx) {
+        ctx.sendJson(await this.Model.delete(ctx.getUrlParam("id")));
+    }
+}
+
+module.exports = { Controler, ModelControler, MongoControler };

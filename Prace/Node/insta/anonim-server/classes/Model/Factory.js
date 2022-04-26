@@ -9,8 +9,10 @@ class ModelFactory {
 
     create(obj, model) {
         let c = class extends Model {};
+        c.model = Model.name;
         if (model) {
             c = class extends model {};
+            c.model = model.name;
         }
         Object.defineProperty(c, "name", { value: this.name });
         if (obj.find) {

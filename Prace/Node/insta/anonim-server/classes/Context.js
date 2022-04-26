@@ -45,4 +45,12 @@ module.exports = class Context {
                 this.url[index].substring(1) === param
         );
     }
+
+    getFiles() {
+        return this.nodeReqest.files;
+    }
+
+    getFile(file) {
+        return this.nodeReqest.files[file];
+    }
 };
