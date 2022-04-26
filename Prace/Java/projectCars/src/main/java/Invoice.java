@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -113,4 +114,14 @@ public class Invoice {
         document.close();
     }
 
+    public static HashMap<String, BaseColor> Colors = new HashMap<>() {
+        {
+            put("red", BaseColor.RED);
+            put("blue", BaseColor.BLUE);
+            put("green", BaseColor.GREEN);
+            put("yellow", BaseColor.YELLOW);
+            put("black", BaseColor.BLACK);
+            put("white", BaseColor.WHITE);
+        }
+    };
 }

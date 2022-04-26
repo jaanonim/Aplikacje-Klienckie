@@ -7,16 +7,38 @@ const getData = async () => {
     let json = await res.json();
     console.log(json);
 
-    document.getElementById("table").innerHTML = "";
+    document.getElementById("table").innerHTML = `
+    <tr>
+        <th>UUID</th>
+        <th>Model</th>
+        <th>Image</th>
+        <th>Airbags</th>
+        <th>Price</th>
+        <th>Tax</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Date</th>
+        <th>Invoice</th>
+    </tr>
+    `;
     for (let i = 0; i < json.length; i++) {
         let ele = document.createElement("tr");
-        ele.innerHTML = `<td>${i}</td><td>${json[i].uuid}</td><td>${
+
+        ele.innerHTML = `<td>${json[i].uuid}</td><td>${
             json[i].model
-        }</td><td>${json[i].year}</td><td>${JSON.stringify(
-            json[i].airbags
-        )}</td><td style="background-color: ${
+        }</td><td><img src="images/${json[i].model}.png"></td><td>${json[
+            i
+        ].airbags
+            .map((airbag) => airbag.name + " " + (airbag.value ? "✓" : "✗"))
+            .join("; ")}</td><td>${json[i].price}</td><td>${
+            json[i].tax
+        }</td><td>${json[i].year}</td><td style="background-color: ${
             json[i].color
-        }; width: 50px; height: 50px"></td>`;
+        }; width: 50px; height: 50px"></td>${
+            json[i].date
+                ? `<td>${json[i].date.year}/${json[i].date.month}/${json[i].date.day}</td>`
+                : "<td></td>"
+        }`;
 
         const uuid = json[i].uuid;
 

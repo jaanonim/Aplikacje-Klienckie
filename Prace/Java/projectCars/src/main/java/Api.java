@@ -13,6 +13,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -76,9 +77,14 @@ public class Api {
 
                     document.open();
 
-                    Font font16 = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-                    Font font20 = FontFactory.getFont(FontFactory.COURIER, 20, BaseColor.BLACK);
-                    Font font24 = FontFactory.getFont(FontFactory.COURIER, 24, BaseColor.BLACK);
+                    Font font16 = FontFactory.getFont(FontFactory.HELVETICA, 16, BaseColor.BLACK);
+                    Font font20 = FontFactory.getFont(FontFactory.HELVETICA, 20, BaseColor.BLACK);
+                    Font font24 = FontFactory.getFont(FontFactory.HELVETICA, 24, BaseColor.BLACK);
+
+                    var color = Invoice.Colors.get(currentCar.getColor());
+
+                    Font fontColor = FontFactory.getFont(FontFactory.HELVETICA, 16,
+                            color == null ? BaseColor.BLACK : color);
 
                     Paragraph p = new Paragraph("Fakturka dla: \n" + uuid, font20);
                     document.add(p);
@@ -86,14 +92,28 @@ public class Api {
                     Paragraph p1 = new Paragraph("Model: " + currentCar.getModel(), font24);
                     document.add(p1);
 
-                    Paragraph p2 = new Paragraph(
-                            "Color: " + currentCar.getColor() + "\n" +
-                                    "Year: " + currentCar.getYear() + "\n" +
-                                    "Airbags: " + currentCar.getAirbags() + "\n" +
-                                    "Price: " + currentCar.getPrice() + "\n"
+                    String airbags = "";
+                    var a = currentCar.getAirbags();
+                    for (int j = 0; j < a.size(); j++) {
+                        airbags += "    " + a.get(j).toNiceString() + "\n";
+                    }
 
-                            , font16);
+                    Paragraph p15 = new Paragraph("Color: " + currentCar.getColor(), fontColor);
+                    document.add(p15);
+
+                    Paragraph p2 = new Paragraph(
+                            "Year: " + currentCar.getYear() + "\n" +
+                                    "Airbags:\n" + airbags +
+                                    "Price: " + currentCar.getPrice() + "\n",
+                            font16);
                     document.add(p2);
+                    try {
+                        Image img = Image
+                                .getInstance("src/main/resources/public/images/" + currentCar.getModel() + ".png");
+                        document.add(img);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
 
                     document.close();
 

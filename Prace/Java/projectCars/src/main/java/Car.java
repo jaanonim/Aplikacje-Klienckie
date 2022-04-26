@@ -95,7 +95,8 @@ public class Car {
                 ", \"year\":" + year +
                 ", \"airbags\":" + airbags +
                 ", \"color\":\"" + color + '\"' +
-                ", \"price\":\"" + price + '\"' +
+                ", \"price\":" + price +
+                ", \"tax\":" + tax +
                 ", \"hasInvoice\":\"" + hasInvoice + '\"' +
                 ", \"date\":" + date +
                 '}';
@@ -117,9 +118,9 @@ public class Car {
 
     static public Car randomCar() {
         UUID uuid = Generators.randomBasedGenerator().generate();
-        String[] model = { "Name", "lol0", "gfd", "cos" };
+        String[] model = { "bmw", "opel", "fiat", "mazda" };
         int[] year = { 2001, 2002, 2003, 2004 };
-        String[] color = { "#ffffff", "#000000", "#ff0000", "#00ff00" };
+        String[] color = { "red", "blue", "black", "white", "green", "yellow" };
         int[] tax = { 0, 7, 23 };
         Random r = new Random();
         Car copy = new Car();
@@ -130,10 +131,10 @@ public class Car {
         copy.setTax(tax[r.nextInt(tax.length)]);
         copy.setYear(year[r.nextInt(year.length)]);
         ArrayList<Airbag> airbags = new ArrayList<Airbag>();
-        airbags.add(new Airbag("tl", true));
-        airbags.add(new Airbag("tr", true));
-        airbags.add(new Airbag("bl", true));
-        airbags.add(new Airbag("br", true));
+        airbags.add(new Airbag("tl", r.nextBoolean()));
+        airbags.add(new Airbag("tr", r.nextBoolean()));
+        airbags.add(new Airbag("bl", r.nextBoolean()));
+        airbags.add(new Airbag("br", r.nextBoolean()));
         copy.setAirbags(airbags);
         copy.setDate(CustomDate.randomDate());
         copy.setPrice(r.nextInt(100000 - 1000) + 100 / 100f);

@@ -14,4 +14,8 @@ public class Airbag {
                 ", \"value\":" + value +
                 '}';
     }
+
+    public String toNiceString() {
+        return name + " " + (value ? "yes" : "no");
+    }
 }

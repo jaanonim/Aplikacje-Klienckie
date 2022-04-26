@@ -7,33 +7,41 @@ const getData = async () => {
     }
     let json = await res.json();
 
-    document.getElementById("table").innerHTML = "";
+    document.getElementById("table").innerHTML = `
+    <tr>
+        <th>UUID</th>
+        <th>Model</th>
+        <th>Image</th>
+        <th>Airbags</th>
+        <th>Price</th>
+        <th>Tax</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Date</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    `;
     for (let i = 0; i < json.length; i++) {
         let ele = document.createElement("tr");
-        //<td>${json[i].date.year}-${json[i].date.month}-${json[i].date.day}</td>
 
         ele.innerHTML = `<td>${json[i].uuid}</td><td>${
             json[i].model
-        }</td><td>${json[i].airbags
+        }</td><td><img src="images/${json[i].model}.png"></td><td>${json[
+            i
+        ].airbags
             .map((airbag) => airbag.name + " " + (airbag.value ? "✓" : "✗"))
             .join("; ")}</td><td>${json[i].price}</td><td>${
-            json[i].year
-        }</td><td style="background-color: ${
+            json[i].tax
+        }</td><td>${json[i].year}</td><td style="background-color: ${
             json[i].color
-        }; width: 50px; height: 50px"></td>`;
+        }; width: 50px; height: 50px"></td>${
+            json[i].date
+                ? `<td>${json[i].date.year}/${json[i].date.month}/${json[i].date.day}</td>`
+                : "<td></td>"
+        }`;
 
         const uuid = json[i].uuid;
-
-        let btn = document.createElement("td");
-        btn.innerText = "Usuń mnie!";
-        btn.onclick = async () => {
-            let res = await fetch(`/delete?uuid=${uuid}`, { method: "delete" });
-            if (res.status !== 200) {
-                console.error(res);
-                return;
-            }
-            getData();
-        };
 
         btn = document.createElement("td");
         btn.innerText = "Edit";
