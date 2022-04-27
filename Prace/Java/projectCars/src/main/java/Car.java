@@ -120,7 +120,7 @@ public class Car {
         UUID uuid = Generators.randomBasedGenerator().generate();
         String[] model = { "bmw", "opel", "fiat", "mazda" };
         int[] year = { 2001, 2002, 2003, 2004 };
-        String[] color = { "red", "blue", "black", "white", "green", "yellow" };
+        String[] color = { "red", "blue", "black", "green", "yellow" };
         int[] tax = { 0, 7, 23 };
         Random r = new Random();
         Car copy = new Car();

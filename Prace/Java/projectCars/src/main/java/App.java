@@ -18,7 +18,9 @@ public class App {
         post("/update", (req, res) -> api.update(req, res));
         put("/generate", (req, res) -> api.generate(req, res));
         put("/invoice/generate", (req, res) -> api.genOneInvoice(req, res));
-        put("/invoice", (req, res) -> api.genInvoice(req, res));
+        put("/invoice/all", (req, res) -> api.genAllInvoice(req, res));
+        put("/invoice/year", (req, res) -> api.genYearInvoice(req, res));
+        put("/invoice/price", (req, res) -> api.genPriceInvoice(req, res));
         get("/invoice", (req, res) -> api.getInvoice(req, res));
     }
 

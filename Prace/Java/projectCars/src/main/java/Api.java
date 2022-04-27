@@ -72,7 +72,8 @@ public class Api {
             if (currentCar.getUuid().toString().equals(uuid)) {
                 try {
                     Document document = new Document();
-                    String path = "invoices/" + uuid + ".pdf";
+                    String path = "src/main/resources/public/invoices/" + uuid + ".pdf";
+
                     PdfWriter.getInstance(document, new FileOutputStream(path));
 
                     document.open();
@@ -133,7 +134,20 @@ public class Api {
         return "not ok";
     }
 
-    public String genInvoice(Request req, Response res) {
+    public String genAllInvoice(Request req, Response res) {
+        Invoice invoice = new Invoice(req.queryParams("seller"), req.queryParams("buyer"),
+                "Faktura za wszystkie auta ", cars);
+        try {
+            invoice.generate();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return invoice.getUuid().toString();
+    }
+
+    public String genYearInvoice(Request req, Response res) {
         int year = Integer.parseInt(req.queryParams("year"));
 
         ArrayList<Car> c = new ArrayList<Car>();
@@ -143,7 +157,36 @@ public class Api {
             }
         }
 
-        Invoice invoice = new Invoice(req.queryParams("title"), req.queryParams("seller"), req.queryParams("buyer"), c);
+        Invoice invoice = new Invoice(req.queryParams("seller"), req.queryParams("buyer"),
+                "Faktura za auta z roku " + Integer.toString(year), c);
+        try {
+            invoice.generate();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return "ok lol";
+    }
+
+    public String genPriceInvoice(Request req, Response res) {
+        int priceMin, priceMax;
+        try {
+            priceMin = Integer.parseInt(req.queryParams("priceMin"));
+            priceMax = Integer.parseInt(req.queryParams("priceMax"));
+        } catch (Exception e) {
+            return "not ok";
+        }
+
+        ArrayList<Car> c = new ArrayList<Car>();
+        for (Car car : cars) {
+            if (car.getPrice() >= priceMin && car.getPrice() <= priceMax) {
+                c.add(car);
+            }
+        }
+
+        Invoice invoice = new Invoice(req.queryParams("seller"), req.queryParams("buyer"),
+                "Faktura za auta z cena " + Integer.toString(priceMin) + "-" + Integer.toString(priceMax), c);
         try {
             invoice.generate();
         } catch (FileNotFoundException e) {
@@ -156,11 +199,16 @@ public class Api {
 
     public String getInvoice(Request req, Response res) {
         String uuid = req.queryParams("uuid");
-        res.type("application/octet-stream"); //
-        res.header("Content-Disposition", "attachment; filename=plik.pdf"); // nagłówek
+        System.out.println(uuid);
+        if (uuid.equals("not ok")) {
+            return "Invalid UUID";
+        }
+        res.type("application/octet-stream");
+        res.header("Content-Disposition", "attachment; filename=plik.pdf");
+        String path = "src/main/resources/public/invoices/" + uuid + ".pdf";
         try {
             OutputStream outputStream = res.raw().getOutputStream();
-            outputStream.write(Files.readAllBytes(Paths.get("invoices/" + uuid + ".pdf")));
+            outputStream.write(Files.readAllBytes(Paths.get(path)));
             return "";
         } catch (Exception e) {
             System.out.println(e);

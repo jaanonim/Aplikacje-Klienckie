@@ -17,9 +17,13 @@
         <a href="/update.html">Update</a>
     </header>
 
-    Title: <input id="titleI"><br>
     Buyer: <input id="buyerI"><br>
     Seller: <input id="sellerI"><br>
+
+    <hr>
+
+    <button id="geninvoiceAll">Generate Invoice All</button>
+    <div id="allD"></div>
 
     <hr>
 
@@ -33,7 +37,20 @@
         <option value="2007">2007</option>
     </select><br>
 
-    <button id="geninvoice">Generate Invoice</button>
+    <button id="geninvoiceYear">Generate Invoice Year</button>
+    <div id="yearD"></div>
+
+    <hr>
+
+    <input type="number" id="priceMinI"> -
+    <input type="number" id="priceMaxI"><br>
+
+    <button id="geninvoicePrice">Generate Invoice Price</button>
+    <div id="priceD"></div>
+
+    <hr>
+
+    <button id="gen">Generate</button>
 
     <table id="table"></table>
 
