@@ -50,7 +50,7 @@ class MongoDb extends Model {
         return new Promise((res, rej) => {
             this.collection.updateOne(
                 { _id: ObjectID(id) },
-                { $set: { obj } },
+                { $set: obj },
                 (err, data) => {
                     if (err) rej(err);
                     else res(data);

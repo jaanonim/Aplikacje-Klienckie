@@ -12,6 +12,20 @@ module.exports = class Context {
         this.nodeResponse.end(JSON.stringify(obj));
     }
 
+    sendCodeJson(code, obj) {
+        this.nodeResponse.writeHead(code, {
+            "content-type": "application/json",
+        });
+        this.nodeResponse.end(JSON.stringify(obj));
+    }
+
+    sendCode(code, text) {
+        this.nodeResponse.writeHead(code, {
+            "content-type": "text/plain",
+        });
+        this.nodeResponse.end(text);
+    }
+
     sendText(text) {
         this.nodeResponse.writeHead(200, {
             "content-type": "text/plain",
@@ -37,6 +51,14 @@ module.exports = class Context {
         return this.nodeReqest.body;
     }
 
+    getBodyValue(value) {
+        try {
+            return this.nodeReqest.body[value];
+        } catch (e) {
+            return null;
+        }
+    }
+
     getUrlParam(param) {
         const url = this.nodeReqest.url.split("/");
         return url.find(
@@ -51,6 +73,7 @@ module.exports = class Context {
     }
 
     getFile(file) {
-        return this.nodeReqest.files[file];
+        let f = this.nodeReqest.files[file];
+        return Array.isArray(f) ? f : [f];
     }
 };

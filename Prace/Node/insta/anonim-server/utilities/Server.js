@@ -10,14 +10,17 @@ module.exports = createServer = (config, endpoints) => {
         req.url = urlObj.pathname;
         req.param = urlObj.searchParams;
 
-        if (req.headers["content-type"].includes("multipart/form-data")) {
+        if (
+            req.headers["content-type"] &&
+            req.headers["content-type"].includes("multipart/form-data")
+        ) {
             const form = formidable(config.formidable);
 
             form.parse(req, (err, fields, files) => {
                 if (err) throw err;
                 req.body = fields;
                 req.files = files;
-                handleRequest(req, res, endpoints);
+                handleRequest(req, res, endpoints, config);
             });
         } else {
             let body = "";
@@ -27,13 +30,13 @@ module.exports = createServer = (config, endpoints) => {
 
             req.on("end", async () => {
                 req.body = parseBody(body, config);
-                handleRequest(req, res, endpoints);
+                handleRequest(req, res, endpoints, config);
             });
         }
     });
 };
 
-const handleRequest = async (req, res, endpoints) => {
+const handleRequest = async (req, res, endpoints, config) => {
     for (let i = 0; i < endpoints.length; i++) {
         const element = endpoints[i];
         if (req.method == element.method) {

@@ -36,8 +36,9 @@ class ModelFactory {
         if (obj.update) {
             c.update = obj.update.bind(c);
         } else {
-            c.update = c.update;
+            c.update = c._update;
         }
+
         if (obj.delete) {
             c.delete = obj.delete.bind(c);
         } else {

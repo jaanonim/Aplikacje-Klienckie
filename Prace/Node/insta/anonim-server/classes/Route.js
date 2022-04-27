@@ -22,6 +22,10 @@ class Route {
         this.add(new Endpoint(url, "DELETE", callback));
     }
 
+    patch(url, callback) {
+        this.add(new Endpoint(url, "PATCH", callback));
+    }
+
     route(url, router) {
         router.translate(url).forEach((element) => {
             this.endpoints.push(element);
