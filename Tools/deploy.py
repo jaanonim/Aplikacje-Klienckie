@@ -21,7 +21,7 @@ os.system(f"git push https://git.heroku.com/{name}.git HEAD:master")
 print("Creating deploy file in apps")
 
 f = open(f"apps/{name}.bat", "w")
-f.write(f"git push https://git.heroku.com/{name}.git HEAD:master")
+f.write(f"git push https://git.heroku.com/{name}.git HEAD:master\npause")
 f.close()
 
 print("Done!")
