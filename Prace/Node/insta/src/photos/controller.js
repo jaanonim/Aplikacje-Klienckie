@@ -2,6 +2,8 @@ const ControlerFactory = require("../../anonim-server/classes/Controler/");
 const PhotoModel = require("./model");
 const logger = require("../../anonim-server/utilities/Logger");
 const fs = require("fs").promises;
+const sharp = require("sharp");
+const FILTERS = require("./filters");
 
 const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
     async create(ctx) {
@@ -17,56 +19,100 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
         }
         const res = await Promise.all(
             files.map(async (ele) => {
+                console.log(ele);
                 const newObj = await this.Model.create({
                     album: album,
-                    url: ele.path,
-                    orginalName: ele.name,
-                    lastChange: "original",
+                    url: ele.filepath,
+                    orginalName: ele.originalFilename,
+                    lastChange: 0,
                     history: [
                         {
+                            id: 0,
+                            url: ele.filepath,
                             status: "original",
                             timestamp: Date.now(),
                         },
                     ],
                 });
-                return newObj.ops[0];
+                return newObj;
             })
         );
 
-        ctx.sendJson(res);
+        ctx.sendCodeJson(201, res);
     },
 
     async delete(ctx) {
         const id = ctx.getUrlParam("id");
-        const url = (await this.Model.find(id))[0].url;
+        const photo = await this.Model.find(id);
+        if (!photo) {
+            ctx.sendCodeJson(404, { error: "Not found" });
+            return;
+        }
+        const url = photo.url;
+
         try {
             await fs.unlink(url);
         } catch (e) {
             logger.error(e);
         }
 
-        ctx.sendJson(await this.Model.delete(id));
+        ctx.sendCodeJson(204, await this.Model.delete(id));
     },
 
     async update(ctx) {
-        const status = ctx.getBodyValue("status");
+        const method = ctx.getBodyValue("method");
+        const value = ctx.getBodyValue("value");
         const id = ctx.getUrlParam("id");
-        const history = (await this.Model.find(id))[0].history;
-        if (!status || status.length < 4) {
-            ctx.sendCodeJson(400, { error: "Missing or invalid status." });
+
+        const photo = await this.Model.find(id);
+        if (!photo) {
+            ctx.sendCodeJson(404, { error: "Not found" });
             return;
         }
+        const history = photo.history;
+        const url = photo.url;
+
+        if (!method) {
+            ctx.sendCodeJson(400, { error: "Missing method." });
+            return;
+        }
+        if (!FILTERS.some((ele) => method === ele.name)) {
+            ctx.sendCodeJson(400, { error: "Invalid method." });
+            return;
+        }
+
         if (!history) {
-            ctx.sendCodeJson(400, { error: "Invalid ID." });
+            ctx.sendCodeJson(400, { error: "Something went wrong." });
             return;
         }
+        if (!url) {
+            ctx.sendCodeJson(400, { error: "Something went wrong." });
+            return;
+        }
+
+        const newId = history.length;
+        const newUrl = `${url}-${newId}`;
+
+        const img = await sharp(url);
+        try {
+            img[method](value).toFile(newUrl);
+        } catch (e) {
+            logger.error(e);
+            ctx.sendCodeJson(400, {
+                error: "Something went wrong. May be missing args for selected method",
+            });
+            return;
+        }
+
         history.push({
-            status: status,
+            id: newId,
+            url: newUrl,
+            status: method,
             timestamp: Date.now(),
         });
         ctx.sendJson(
             await this.Model.update(id, {
-                lastChange: status,
+                lastChange: newId,
                 history: history,
             })
         );
@@ -77,7 +123,7 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
         const res = [];
         ids.forEach(async (id) => {
             try {
-                const url = (await this.Model.find(id))[0].url;
+                const url = (await this.Model.find(id)).url;
 
                 await fs.unlink(url);
             } catch (e) {
@@ -86,6 +132,22 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
             res.push(await this.Model.delete(id));
         });
         ctx.sendJson(res);
+    },
+
+    async filterOptions(ctx) {
+        ctx.sendJson(FILTERS);
+    },
+
+    async metadata(ctx) {
+        const id = ctx.getUrlParam("id");
+        const url = (await this.Model.find(id)).url;
+        if (!url) {
+            ctx.sendCodeJson(404, { error: "Not found" });
+            return;
+        }
+
+        const metadata = await sharp(url).metadata();
+        ctx.sendJson(metadata);
     },
 });
 

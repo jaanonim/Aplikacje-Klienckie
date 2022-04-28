@@ -39,13 +39,15 @@ class ModelControler extends Controler {
 
 class MongoControler extends ModelControler {
     static async find(ctx) {
-        ctx.sendJson(await this.Model.find(ctx.getUrlParam("id")));
+        const obj = await this.Model.find(ctx.getUrlParam("id"));
+        if (obj) ctx.sendJson(obj);
+        else ctx.sendCodeJson(404, { error: "Not found" });
     }
     static async findAll(ctx) {
         ctx.sendJson(await this.Model.findAll({}));
     }
     static async create(ctx) {
-        ctx.sendJson(await this.Model.create(ctx.getBody()));
+        ctx.sendCodeJson(201, await this.Model.create(ctx.getBody()));
     }
     static async update(ctx) {
         ctx.sendJson(
@@ -53,7 +55,7 @@ class MongoControler extends ModelControler {
         );
     }
     static async delete(ctx) {
-        ctx.sendJson(await this.Model.delete(ctx.getUrlParam("id")));
+        ctx.sendCodeJson(204, await this.Model.delete(ctx.getUrlParam("id")));
     }
 }
 

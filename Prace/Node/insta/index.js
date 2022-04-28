@@ -1,12 +1,7 @@
 const Server = require("./anonim-server");
-const Route = require("./anonim-server/classes/Route");
-const PhotoRoute = require("./src/photos");
+const route = require("./src/router");
 
 const app = new Server();
-
-const api = new Route();
-
-api.route("/photo", PhotoRoute);
 
 app.setConfig("jsonParser", true);
 app.setConfig("formidable", {
@@ -17,6 +12,8 @@ app.setConfig("formidable", {
     },
 });
 
-app.root.route("/api", api);
+app.root.route("/api", route);
 
 app.listen();
+
+module.exports = app.server;

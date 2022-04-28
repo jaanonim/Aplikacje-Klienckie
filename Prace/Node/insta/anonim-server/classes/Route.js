@@ -26,6 +26,14 @@ class Route {
         this.add(new Endpoint(url, "PATCH", callback));
     }
 
+    put(url, callback) {
+        this.add(new Endpoint(url, "PUT", callback));
+    }
+
+    options(url, callback) {
+        this.add(new Endpoint(url, "OPTIONS", callback));
+    }
+
     route(url, router) {
         router.translate(url).forEach((element) => {
             this.endpoints.push(element);

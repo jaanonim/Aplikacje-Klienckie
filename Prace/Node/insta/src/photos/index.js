@@ -7,6 +7,16 @@ const router = RouterFactory.create(PhotoControler, [
         method: "delete",
         func: "deleteMany",
     },
+    {
+        url: "/:id/metadata/",
+        method: "get",
+        func: "metadata",
+    },
+    {
+        url: "/filters/",
+        method: "options",
+        func: "filterOptions",
+    },
 ]);
 
 module.exports = router;

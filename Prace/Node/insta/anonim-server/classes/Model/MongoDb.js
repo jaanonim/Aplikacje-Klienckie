@@ -19,7 +19,7 @@ class MongoDb extends Model {
         return new Promise((res, rej) => {
             this.collection.find({ _id: ObjectID(id) }).toArray((err, data) => {
                 if (err) rej(err);
-                else res(data);
+                else res(data[0]);
             });
         });
     }
@@ -37,7 +37,7 @@ class MongoDb extends Model {
         return new Promise((res, rej) => {
             this.collection.insert(obj, (err, data) => {
                 if (err) rej(err);
-                else res(data);
+                else res(data.ops[0]);
             });
         });
     }
@@ -48,12 +48,13 @@ class MongoDb extends Model {
         }
 
         return new Promise((res, rej) => {
+            const obj = this._find(id);
             this.collection.updateOne(
                 { _id: ObjectID(id) },
                 { $set: obj },
                 (err, data) => {
                     if (err) rej(err);
-                    else res(data);
+                    else res(obj);
                 }
             );
         });
@@ -61,9 +62,10 @@ class MongoDb extends Model {
 
     static _delete(id) {
         return new Promise((res, rej) => {
+            const obj = this._find(id);
             this.collection.remove({ _id: ObjectID(id) }, (err, data) => {
                 if (err) rej(err);
-                else res(data);
+                else res(obj);
             });
         });
     }
