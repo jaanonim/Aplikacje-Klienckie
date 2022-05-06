@@ -12,6 +12,7 @@ class Table {
         let json = await res.json()
         this.records = [];
         this.html.innerHTML = '';
+        json.sort((a, b) => a.country - b.country)
         json.forEach(element => {
             this.records.push(new Record(element.ID, element.country, element.nominal, element.nr, element.alloy, element.year, this));
         });
