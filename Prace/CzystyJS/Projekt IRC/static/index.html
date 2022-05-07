@@ -5,19 +5,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/tinyscrollbar.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/main.css">
+
+    <script src="js/tinyscrollbar.min.js" defer></script>
     <script src="js/index.js" type="module" defer></script>
     <title>IRC</title>
 </head>
 
 <body>
     <h1>IRC</h1>
-    <div id="main">
+    <div class="box">
+        <div id="scrollbar1">
+            <div class="scrollbar">
+                <div class="track">
+                    <div class="thumb">
+                        <div class="end"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="viewport">
+                <div class="overview" id="main">
+                </div>
+            </div>
+        </div>
     </div>
     <div class="inputs">
         <input type="text" id="input" placeholder="Type a message...">
         <button id="send">Send</button>
     </div>
+    <a href="src.zip">source</a>
 </body>
 
 </html>

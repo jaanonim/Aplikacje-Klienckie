@@ -11,6 +11,12 @@ while (c.length < 6) {
 }
 var COLOR = "#" + c;
 
+var $scrollbar;
+var scrollbar = null;
+$scrollbar = document.getElementById("scrollbar1");
+$scrollbar.setAttribute("data", "plugin_tinyscrollbar");
+scrollbar = tinyscrollbar($scrollbar);
+
 class Chat {
     constructor() {
         new Form();
@@ -202,7 +208,11 @@ class Message {
             this.author
         }: ${this.message}`;
         parent.appendChild(message);
-        parent.scrollTo(0, parent.scrollHeight);
+        var typeOfUpdate = "bottom",
+            textId = 1,
+            textNew = message,
+            scrollbar5 = $scrollbar.getAttribute("plugin_tinyscrollbar");
+        scrollbar.update(typeOfUpdate);
     }
 }
 

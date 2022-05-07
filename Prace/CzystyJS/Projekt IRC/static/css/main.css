@@ -17,46 +17,44 @@ body {
     overflow: hidden;
 }
 
+a {
+    text-align: center;
+    width: 100%;
+    display: block;
+    color: #fff;
+}
+
+.viewport {
+    height: 100%;
+}
+#main {
+    height: 100%;
+}
+
+.box {
+    width: 70%;
+    height: 70%;
+    margin: 2rem auto;
+    border-radius: 1rem;
+    border: #fff solid 1px;
+}
+/*
 #main {
     width: 70%;
     height: 70%;
     margin: 2rem auto;
-    padding-right: 2rem;
     border-radius: 1rem;
     border: #fff solid 1px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
+}*/
 
 .message {
-    width: calc(100% - 2rem);
+    width: calc(100% - 5rem);
     height: auto;
     padding: 1rem;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     margin: 1rem;
     white-space: pre;
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }
 
 .inputs {
