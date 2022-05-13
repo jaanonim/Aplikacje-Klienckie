@@ -29,7 +29,7 @@ module.exports = class Endpoint {
 
         logger.info(this.method + "[200] OK: " + this.getUrl());
         let ctx = new Context(req, res, this.url);
-        if (options.middlewares)
+        if (this.options.middlewares)
             for (let i = 0; i < options.middlewares.length; i++) {
                 const middleware = MiddlewareManager.getMiddleware(
                     options.middlewares[i]

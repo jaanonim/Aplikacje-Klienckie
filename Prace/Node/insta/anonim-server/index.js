@@ -1,1 +1,1 @@
-module.exports = require('./classes/Server');
+module.exports = require("./classes/Server");

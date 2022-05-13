@@ -76,4 +76,17 @@ module.exports = class Context {
         let f = this.nodeReqest.files[file];
         return Array.isArray(f) ? f : [f];
     }
+
+    machBody(obj) {
+        const res = {};
+        const body = this.nodeReqest.body;
+        for (const [key, value] of Object.entries(obj)) {
+            if (body[key]) {
+                res[key] = body[key];
+            } else if (value) {
+                return { error: true, value: key };
+            }
+        }
+        return { error: false, value: res };
+    }
 };

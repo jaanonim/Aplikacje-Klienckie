@@ -3,18 +3,24 @@ const logger = require("../utilities/Logger");
 
 const Route = require("./Route");
 
+require("dotenv").config();
+
 module.exports = class Server {
+    static config = {
+        jsonParser: false,
+        port: process.env.PORT || 3000,
+        static: "./static",
+        formidable: {
+            uploadDir: "./static/uploads",
+        },
+        middlewares: [],
+        JWT: {
+            expires: "1d",
+        },
+    };
+
     constructor() {
         this.endpoints = [];
-        this.config = {
-            jsonParser: false,
-            port: process.env.PORT || 3000,
-            static: "./static",
-            formidable: {
-                uploadDir: "./static/uploads",
-            },
-            middlewares: [],
-        };
         /*
             Options for config:
             - jsonParser:bool
@@ -28,7 +34,7 @@ module.exports = class Server {
     }
 
     initMiddlewares() {
-        this.config.middlewares.forEach((mid) => {
+        Server.config.middlewares.forEach((mid) => {
             if (mid[0] === "@") {
                 mid = "./Middleware/default/" + mid.slice(1);
             }
@@ -39,15 +45,15 @@ module.exports = class Server {
     listen() {
         this.initMiddlewares();
         this.endpoints = this.root.translate("");
-        this.server = createServer(this.config, this.endpoints);
-        this.server.listen(this.config.port, () => {
+        this.server = createServer(Server.config, this.endpoints);
+        this.server.listen(Server.config.port, () => {
             logger.info(
-                `Server is listening on http://localhost:${this.config.port}`
+                `Server is listening on http://localhost:${Server.config.port}`
             );
         });
     }
 
     setConfig(key, value) {
-        this.config[key] = value;
+        Server.config[key] = value;
     }
 };
