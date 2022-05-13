@@ -10,28 +10,28 @@ class Route {
         else throw Error("Must be instance of Endpoint");
     }
 
-    get(url, callback) {
-        this.add(new Endpoint(url, "GET", callback));
+    get(url, callback, options) {
+        this.add(new Endpoint(url, "GET", callback, options));
     }
 
-    post(url, callback) {
-        this.add(new Endpoint(url, "POST", callback));
+    post(url, callback, options) {
+        this.add(new Endpoint(url, "POST", callback, options));
     }
 
-    delete(url, callback) {
-        this.add(new Endpoint(url, "DELETE", callback));
+    delete(url, callback, options) {
+        this.add(new Endpoint(url, "DELETE", callback, options));
     }
 
-    patch(url, callback) {
-        this.add(new Endpoint(url, "PATCH", callback));
+    patch(url, callback, options) {
+        this.add(new Endpoint(url, "PATCH", callback, options));
     }
 
-    put(url, callback) {
-        this.add(new Endpoint(url, "PUT", callback));
+    put(url, callback, options) {
+        this.add(new Endpoint(url, "PUT", callback, options));
     }
 
-    options(url, callback) {
-        this.add(new Endpoint(url, "OPTIONS", callback));
+    options(url, callback, options) {
+        this.add(new Endpoint(url, "OPTIONS", callback, options));
     }
 
     route(url, router) {

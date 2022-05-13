@@ -1,54 +1,55 @@
 const Route = require("../Route");
 
 class RouterFactory {
-    static defaultRouter = [
-        {
+    static defaultRouter = {
+        findAll: {
             url: "/",
             method: "get",
-            func: "findAll",
+            options: {},
         },
-        {
+        find: {
             url: "/:id/",
             method: "get",
-            func: "find",
+            options: {},
         },
-        {
+        create: {
             url: "/",
             method: "post",
-            func: "create",
+            options: {},
         },
-        {
+        update: {
             url: "/:id/",
             method: "patch",
-            func: "update",
+            options: {},
         },
-        {
+        delete: {
             url: "/:id/",
             method: "delete",
-            func: "delete",
+            options: {},
         },
-    ];
+    };
 
     static create(controler, data) {
-        if (Array.isArray(data))
-            data = RouterFactory.defaultRouter.concat(data);
+        if (data) data = { ...RouterFactory.defaultRouter, ...data };
         let route = new Route();
         for (const [key, value] of Object.entries(data)) {
             route[value.method](
                 value.url,
-                controler[value.func].bind(controler)
+                controler[key].bind(controler),
+                value.options
             );
         }
         return route;
     }
 
     static createWithOverrite(controler, data) {
-        if (!Array.isArray(data)) throw Error("Invalid router data");
+        if (data) throw Error("Invalid router data");
         let route = new Route();
         for (const [key, value] of Object.entries(data)) {
             route[value.method](
                 value.url,
-                controler[value.func].bind(controler)
+                controler[key].bind(controler),
+                value.options
             );
         }
         return route;

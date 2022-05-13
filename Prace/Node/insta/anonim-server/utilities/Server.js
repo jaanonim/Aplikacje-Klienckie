@@ -1,7 +1,5 @@
 const http = require("http");
 const handleFile = require("./Files");
-const parseBody = require("./BodyParser");
-const formidable = require("formidable");
 
 module.exports = createServer = (config, endpoints) => {
     return http.createServer(async (req, res) => {
@@ -10,29 +8,7 @@ module.exports = createServer = (config, endpoints) => {
         req.url = urlObj.pathname;
         req.param = urlObj.searchParams;
 
-        if (
-            req.headers["content-type"] &&
-            req.headers["content-type"].includes("multipart/form-data")
-        ) {
-            const form = formidable(config.formidable);
-
-            form.parse(req, (err, fields, files) => {
-                if (err) throw err;
-                req.body = fields;
-                req.files = files;
-                handleRequest(req, res, endpoints, config);
-            });
-        } else {
-            let body = "";
-            req.on("data", (data) => {
-                body += data.toString();
-            });
-
-            req.on("end", async () => {
-                req.body = parseBody(body, config);
-                handleRequest(req, res, endpoints, config);
-            });
-        }
+        handleRequest(req, res, endpoints, config);
     });
 };
 
@@ -47,7 +23,7 @@ const handleRequest = async (req, res, endpoints, config) => {
                     : v === element.url[i]
             );
             if (match.length === element.url.length) {
-                await element.handler(req, res);
+                await element.handler(req, res, config);
                 return;
             }
         }

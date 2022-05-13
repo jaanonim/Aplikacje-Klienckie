@@ -1,5 +1,4 @@
 const createServer = require("../utilities/Server");
-const Endpoint = require("./Endpoint");
 const logger = require("../utilities/Logger");
 
 const Route = require("./Route");
@@ -14,6 +13,7 @@ module.exports = class Server {
             formidable: {
                 uploadDir: "./static/uploads",
             },
+            middlewares: [],
         };
         /*
             Options for config:
@@ -21,12 +21,23 @@ module.exports = class Server {
             - port:number
             - static:string
             - formidable:object
+            - middlewares:list of strings
         */
 
         this.root = new Route();
     }
 
+    initMiddlewares() {
+        this.config.middlewares.forEach((mid) => {
+            if (mid[0] === "@") {
+                mid = "./Middleware/default/" + mid.slice(1);
+            }
+            require(mid);
+        });
+    }
+
     listen() {
+        this.initMiddlewares();
         this.endpoints = this.root.translate("");
         this.server = createServer(this.config, this.endpoints);
         this.server.listen(this.config.port, () => {

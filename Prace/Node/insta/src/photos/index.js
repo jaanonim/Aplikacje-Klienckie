@@ -1,22 +1,33 @@
 const RouterFactory = require("../../anonim-server/classes/Router");
 const PhotoControler = require("./controller");
 
-const router = RouterFactory.create(PhotoControler, [
-    {
+const router = RouterFactory.create(PhotoControler, {
+    deleteMany: {
         url: "/",
         method: "delete",
-        func: "deleteMany",
     },
-    {
+    metadata: {
         url: "/:id/metadata/",
         method: "get",
-        func: "metadata",
     },
-    {
+    filterOptions: {
         url: "/filters/",
         method: "options",
-        func: "filterOptions",
     },
-]);
+    create: {
+        url: "/",
+        method: "post",
+        options: {
+            fileUpload: true,
+        },
+    },
+    update: {
+        url: "/:id/",
+        method: "patch",
+        options: {
+            fileUpload: true,
+        },
+    },
+});
 
 module.exports = router;

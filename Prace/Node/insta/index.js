@@ -11,6 +11,7 @@ app.setConfig("formidable", {
         return mimetype && mimetype.includes("image");
     },
 });
+app.setConfig("middlewares", ["@Auth"]);
 
 app.root.route("/api", route);
 
