@@ -15,20 +15,21 @@ module.exports = class Server {
         },
         middlewares: [],
         JWT: {
-            expires: "1d",
+            expiresIn: "1d",
         },
     };
+    /*
+        Options for config:
+        - jsonParser:bool
+        - port:number
+        - static:string
+        - formidable:object
+        - JWT:object
+        - middlewares:list of strings (start with "@" for build in middlewares)
+    */
 
     constructor() {
         this.endpoints = [];
-        /*
-            Options for config:
-            - jsonParser:bool
-            - port:number
-            - static:string
-            - formidable:object
-            - middlewares:list of strings
-        */
 
         this.root = new Route();
     }
@@ -51,6 +52,18 @@ module.exports = class Server {
                 `Server is listening on http://localhost:${Server.config.port}`
             );
         });
+    }
+
+    loadConfig(config) {
+        this._tryLoadConfigObj(config.default);
+        this._tryLoadConfigObj(config[process.env.NODE_ENV]);
+    }
+
+    _tryLoadConfigObj(obj) {
+        if (obj)
+            Object.keys(obj).forEach((key) => {
+                this.setConfig(key, obj[key]);
+            });
     }
 
     setConfig(key, value) {

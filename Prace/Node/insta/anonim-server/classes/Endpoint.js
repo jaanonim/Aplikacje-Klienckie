@@ -30,16 +30,16 @@ module.exports = class Endpoint {
         logger.info(this.method + "[200] OK: " + this.getUrl());
         let ctx = new Context(req, res, this.url);
         if (this.options.middlewares)
-            for (let i = 0; i < options.middlewares.length; i++) {
+            for (let i = 0; i < this.options.middlewares.length; i++) {
                 const middleware = MiddlewareManager.getMiddleware(
-                    options.middlewares[i]
+                    this.options.middlewares[i]
                 );
                 if (!middleware) {
                     throw new Error(
-                        `Middleware ${options.middlewares[i]} not found.`
+                        `Middleware ${this.options.middlewares[i]} not found.`
                     );
                 }
-                ctx = middleware.use(ctx);
+                if (await middleware.use(ctx)) return;
             }
         await this.callback(ctx);
     }

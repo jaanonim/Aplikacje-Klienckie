@@ -3,6 +3,8 @@ module.exports = class Context {
         this.nodeResponse = res;
         this.nodeReqest = req;
         this.url = url;
+
+        this.auth = null;
     }
 
     sendJson(obj) {
@@ -88,5 +90,17 @@ module.exports = class Context {
             }
         }
         return { error: false, value: res };
+    }
+
+    getHeader(header) {
+        return this.nodeReqest.headers[header];
+    }
+
+    _setAuth(data) {
+        this.auth = data;
+    }
+
+    getAuth() {
+        return this.auth.data;
     }
 };

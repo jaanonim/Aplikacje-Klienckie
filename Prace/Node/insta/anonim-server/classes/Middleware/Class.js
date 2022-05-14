@@ -1,6 +1,6 @@
 class Middleware {
-    static use(ctx) {
-        return ctx;
+    static async use(ctx) {
+        return false;
     }
 }
 
