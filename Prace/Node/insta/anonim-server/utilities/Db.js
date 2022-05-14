@@ -17,7 +17,7 @@ module.exports = class Db {
 
     static db_mongo() {
         return new Promise((res, rej) => {
-            mongoClient.connect("mongodb://localhost/test", (err, db) => {
+            mongoClient.connect(process.env.DB_URL, (err, db) => {
                 if (err) rej(err);
                 else res(db);
             });
