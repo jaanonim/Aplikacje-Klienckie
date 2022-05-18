@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".Main">
 
 
     <TextView
@@ -43,7 +43,7 @@
                     android:id="@+id/btn1_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:srcCompat="@drawable/ic_baseline_settings_24" />
+                    app:srcCompat="@drawable/ic_baseline_settings_24" />
 
                 <TextView
                     android:id="@+id/btn1_text"
@@ -65,7 +65,7 @@
                     android:id="@+id/btn2_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:srcCompat="@drawable/ic_baseline_settings_24" />
+                    app:srcCompat="@drawable/ic_baseline_settings_24" />
 
                 <TextView
                     android:id="@+id/btn2_text"
@@ -95,7 +95,7 @@
                     android:id="@+id/btn3_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:srcCompat="@drawable/ic_baseline_settings_24" />
+                    app:srcCompat="@drawable/ic_baseline_settings_24" />
 
                 <TextView
                     android:id="@+id/btn3_text"
@@ -117,7 +117,7 @@
                     android:id="@+id/btn4_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:srcCompat="@drawable/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
 
                 <TextView
                     android:id="@+id/btn4_text"
