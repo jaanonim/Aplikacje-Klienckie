@@ -7,5 +7,5 @@ module.exports = {
             return mimetype && mimetype.includes("image");
         },
     },
-    middlewares: ["@Auth"],
+    middlewares: ["@Auth", "./middlewares/ActiveAccount.js"],
 };

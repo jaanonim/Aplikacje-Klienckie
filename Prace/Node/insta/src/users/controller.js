@@ -1,6 +1,8 @@
 const ControlerFactory = require("../../anonim-server/classes/Controler/");
 const UserModel = require("./model");
 const PassCrypto = require("../../anonim-server/utilities/PassCrypto");
+const Mail = require("../../anonim-server/utilities/Mail");
+const JWToken = require("../../anonim-server/utilities/JWToken");
 
 const UserControler = new ControlerFactory("User", UserModel).create({
     async create(ctx) {
@@ -55,10 +57,93 @@ const UserControler = new ControlerFactory("User", UserModel).create({
         const res = await this.Model.create(value);
         ctx.sendCodeJson(201, res);
 
-        //TODO: Send Email
+        const token = await JWToken.createToken({
+            id: res._id,
+            active: true,
+        });
+
+        Mail.send(
+            value.email,
+            "Activate your account",
+            `
+            <h1>Hello ${value.firstName}</h1>
+            <p>
+                To activate your account, please click on the link below:
+            </p>
+            <a href="${process.env.BASE_URL}/api/user/activate/${token}/">
+            ${process.env.BASE_URL}/api/user/activate/${token}/
+            </a>
+            <p>
+                If you did not request this, please ignore this email and your password will remain unchanged.
+            </p>
+            <p>
+                Regards,
+            </p>
+            <p>
+                Insta
+            </p>
+            `
+        );
     },
-    async confirm(ctx) {},
-    async login(ctx) {},
+
+    async activate(ctx) {
+        const token = ctx.getUrlParam("token");
+        const { error, value } = await JWToken.verifyToken(token);
+
+        if (
+            error ||
+            !value.data ||
+            value.data.active !== true ||
+            !value.data.id
+        ) {
+            ctx.sendCodeJson(400, { error: `Invalid token.` });
+            return;
+        }
+        const user = await this.Model.find(value.data.id);
+        if (!user) {
+            ctx.sendCodeJson(400, { error: `Invalid token (User not found).` });
+            return;
+        }
+
+        if (user.active) {
+            ctx.sendCodeJson(400, { error: `User is allready active.` });
+            return;
+        }
+        await this.Model.update(value.data.id, { active: true });
+        ctx.sendCodeJson(200, { message: `Account activated.` });
+    },
+
+    async login(ctx) {
+        const { error, value } = ctx.machBody({
+            password: true,
+            email: true,
+        });
+        if (error) {
+            ctx.sendCodeJson(400, { error: `Missing ${value}.` });
+            return;
+        }
+        const [user] = await this.Model.findAll({ email: value.email });
+        if (!user) {
+            ctx.sendCodeJson(400, { error: `Invalid email or password.` });
+            return;
+        }
+        if (!user.active) {
+            ctx.sendCodeJson(403, {
+                error: `Check you email for activation link.`,
+            });
+            return;
+        }
+        if (await PassCrypto.veryfiy(value.password, user.password)) {
+            delete user.password;
+            user.token = await JWToken.createToken({ id: user._id });
+            ctx.sendCodeJson(200, user);
+            return;
+        } else {
+            ctx.sendCodeJson(400, { error: `Invalid email or password.` });
+            return;
+        }
+    },
+
     async logout(ctx) {},
     async update(ctx) {},
 });

@@ -6,8 +6,16 @@ const router = RouterFactory.create(UserControler, {
         url: "/",
         method: "get",
         options: {
-            middlewares: ["Auth"],
+            middlewares: ["Auth", "ActiveAccount"],
         },
+    },
+    activate: {
+        url: "/activate/:token/",
+        method: "get",
+    },
+    login: {
+        url: "/login/",
+        method: "post",
     },
 });
 

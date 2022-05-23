@@ -38,6 +38,8 @@ module.exports = class Server {
         Server.config.middlewares.forEach((mid) => {
             if (mid[0] === "@") {
                 mid = "./Middleware/default/" + mid.slice(1);
+            } else {
+                mid = "../../" + mid;
             }
             require(mid);
         });

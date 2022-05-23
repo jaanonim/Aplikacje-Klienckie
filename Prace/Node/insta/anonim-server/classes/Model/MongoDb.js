@@ -48,13 +48,15 @@ class MongoDb extends Model {
         }
 
         return new Promise((res, rej) => {
-            const obj = this._find(id);
             this.collection.updateOne(
                 { _id: ObjectID(id) },
                 { $set: obj },
                 (err, data) => {
                     if (err) rej(err);
-                    else res(obj);
+                    else
+                        this._find(id).then((v) => {
+                            res(v);
+                        });
                 }
             );
         });

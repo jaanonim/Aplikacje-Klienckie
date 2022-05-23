@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const config = require("../classes/Server").config;
+const CONFIG = require("../classes/Server").config;
 
 const JWT_SECRET = process.env.JWT_SECRET || "thisisnotsecreet";
 
 class JWToken {
-    static async createToken(data) {
-        let token = await jwt.sign({ data }, JWT_SECRET, config.JWT);
+    static async createToken(data, config = CONFIG.JWT) {
+        let token = await jwt.sign({ data }, JWT_SECRET, config);
         return token;
     }
 
