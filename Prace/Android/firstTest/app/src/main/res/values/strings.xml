@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">firstTest</string>
     <string name="title_activity_test">Test</string>
+    <string name="account_title">Account</string>
+    <string name="gallery_title">Gallery</string>
+    <string name="search_title">Search</string>
+    <string name="rolka_title">Rolka</string>
 </resources>
