@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -14,14 +15,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Account extends AppCompatActivity {
 
-    String[] array = new String[]{"a","b","c"};
+    String[] array = new String[]{"a", "b", "c"};
+
+    ImageView profileImg;
+
+    public void updateImg() {
+        if (LocalDb.profileImage != null) {
+            profileImg.setImageBitmap(LocalDb.profileImage);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateImg();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        ActionBar actionBar =  getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -31,19 +46,21 @@ public class Account extends AppCompatActivity {
                 Account.this,
                 R.layout.account_img,
                 R.id.textView2,
-                array );
+                array);
 
         gridView.setAdapter(adapter);
 
+        profileImg = findViewById(R.id.profileAccount);
+
 
         Button bt = findViewById(R.id.button2);
-        bt.setOnClickListener((v)->{
-            Intent intent = new Intent(Account.this,Edit.class);
+        bt.setOnClickListener((v) -> {
+            Intent intent = new Intent(Account.this, Edit.class);
             startActivity(intent);
         });
 
-        gridView.setOnItemClickListener((a,v,i,l)-> {
-            Intent intent = new Intent(Account.this,Photo.class);
+        gridView.setOnItemClickListener((a, v, i, l) -> {
+            Intent intent = new Intent(Account.this, Photo.class);
             intent.putExtra("photo", array[i]);
             startActivity(intent);
 
