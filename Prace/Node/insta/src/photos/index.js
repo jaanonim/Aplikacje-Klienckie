@@ -5,6 +5,9 @@ const router = RouterFactory.create(PhotoControler, {
     deleteMany: {
         url: "/",
         method: "delete",
+        options: {
+            middlewares: ["Auth", "ActiveAccount"],
+        },
     },
     metadata: {
         url: "/:id/metadata/",
@@ -18,6 +21,7 @@ const router = RouterFactory.create(PhotoControler, {
         url: "/",
         method: "post",
         options: {
+            middlewares: ["Auth", "ActiveAccount"],
             fileUpload: true,
         },
     },
@@ -26,6 +30,14 @@ const router = RouterFactory.create(PhotoControler, {
         method: "patch",
         options: {
             fileUpload: true,
+            middlewares: ["Auth", "ActiveAccount"],
+        },
+    },
+    delete: {
+        url: "/:id/",
+        method: "delete",
+        options: {
+            middlewares: ["Auth", "ActiveAccount"],
         },
     },
 });

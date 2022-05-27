@@ -53,6 +53,7 @@ const UserControler = new ControlerFactory("User", UserModel).create({
         value.password = await PassCrypto.encrypt(value.password);
 
         value.active = false;
+        value.profileImg = null; //TODO: add default profile image
 
         const res = await this.Model.create(value);
         ctx.sendCodeJson(201, res);
@@ -145,7 +146,23 @@ const UserControler = new ControlerFactory("User", UserModel).create({
     },
 
     async logout(ctx) {},
-    async update(ctx) {},
+
+    async update(ctx) {
+        const { error, value } = ctx.machBody({
+            firstName: false,
+            lastName: false,
+            email: false,
+        });
+        const profileImg = ctx.getFile("file")[0];
+        if (profileImg) {
+            value.profileImg = profileImg.filepath;
+        }
+        const user = await ctx.getUser();
+        const res = await this.Model.update(user._id, value);
+        delete res.password;
+        ctx.sendCodeJson(200, res);
+    },
+
     async current(ctx) {
         ctx.sendCodeJson(200, await ctx.getUser());
     },

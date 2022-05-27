@@ -17,6 +17,21 @@ const router = RouterFactory.createWithOverrite(UserControler, {
         url: "/login/",
         method: "post",
     },
+    create: {
+        url: "/",
+        method: "post",
+        options: {
+            fileUpload: true,
+        },
+    },
+    update: {
+        url: "/",
+        method: "patch",
+        options: {
+            fileUpload: true,
+            middlewares: ["Auth", "ActiveAccount"],
+        },
+    },
 });
 
 module.exports = router;
