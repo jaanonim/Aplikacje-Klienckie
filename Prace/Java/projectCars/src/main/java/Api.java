@@ -166,7 +166,7 @@ public class Api {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        return invoice.getUuid().toString();;
+        return invoice.getUuid().toString();
     }
 
     public String genPriceInvoice(Request req, Response res) {
@@ -194,7 +194,7 @@ public class Api {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        return invoice.getUuid().toString();;
+        return invoice.getUuid().toString();
     }
 
     public String getInvoice(Request req, Response res) {
