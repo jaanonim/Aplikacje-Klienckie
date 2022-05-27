@@ -4,6 +4,7 @@ const logger = require("../../anonim-server/utilities/Logger");
 const fs = require("fs").promises;
 const sharp = require("sharp");
 const FILTERS = require("./filters");
+const path = require("path");
 
 const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
     async create(ctx) {

@@ -43,7 +43,7 @@ class RouterFactory {
     }
 
     static createWithOverrite(controler, data) {
-        if (data) throw Error("Invalid router data");
+        if (!data) throw Error("Invalid router data");
         let route = new Route();
         for (const [key, value] of Object.entries(data)) {
             route[value.method](

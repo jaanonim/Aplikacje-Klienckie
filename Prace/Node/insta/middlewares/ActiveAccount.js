@@ -16,6 +16,7 @@ module.exports = new MiddlewareFactory("ActiveAccount").create(async (ctx) => {
         });
         return true;
     }
+    delete user.password;
     ctx.getUser = () => {
         return user;
     };

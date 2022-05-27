@@ -146,6 +146,9 @@ const UserControler = new ControlerFactory("User", UserModel).create({
 
     async logout(ctx) {},
     async update(ctx) {},
+    async current(ctx) {
+        ctx.sendCodeJson(200, await ctx.getUser());
+    },
 });
 
 module.exports = UserControler;
