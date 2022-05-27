@@ -1,18 +1,14 @@
 import Tile from "./tile.js";
 
 export default class Panel {
-    constructor(html, size) {
+    constructor(html, size, config) {
         this.html = html;
         this.size = size;
-        this.border = 20;
-        this.scale = 4;
-        this.paletData = {
-            border: { x: 2, y: 1 },
-            startPos: { x: 3, y: 215 },
-            endPos: { x: 50, y: 230 },
-        };
-        this.ctx = this.html.getContext("2d");
-        this.ctx.imageSmoothingEnabled = false;
+        this.outline = config.outline;
+        this.border = config.border;
+        this.scale = config.scale;
+        this.paletData = config.paletData;
+
         this.setupImg();
     }
 
@@ -23,6 +19,38 @@ export default class Panel {
 
     afterLoad() {
         this.generateTiles();
+        this.html.addEventListener("mousemove", this.mouse.bind(this));
+        this.html.addEventListener("click", this.click.bind(this));
+    }
+
+    mouse(e) {
+        for (let i = 0; i < this.tiles.length; i++) {
+            let tile = this.tiles[i];
+            if (
+                tile.x < e.offsetX &&
+                e.offsetX < tile.x + tile.wigth &&
+                tile.y < e.offsetY &&
+                e.offsetY < tile.y + tile.height
+            ) {
+                tile.higthligth();
+            } else {
+                tile.unhigthligth();
+            }
+        }
+    }
+
+    click(e) {
+        for (let i = 0; i < this.tiles.length; i++) {
+            let tile = this.tiles[i];
+            if (
+                tile.x < e.offsetX &&
+                e.offsetX < tile.x + tile.wigth &&
+                tile.y < e.offsetY &&
+                e.offsetY < tile.y + tile.height
+            ) {
+                tile.click();
+            }
+        }
     }
 
     generateTiles() {
@@ -37,6 +65,16 @@ export default class Panel {
 
         const countX = Math.floor(sizeX / this.size.width);
         const countY = Math.floor(sizeY / this.size.height);
+
+        this.html.width =
+            countX * this.size.width * this.scale + (countX + 1) * this.border;
+        this.html.height =
+            countY * this.size.height * this.scale + (countY + 1) * this.border;
+
+        this.ctx = this.html.getContext("2d");
+        this.ctx.imageSmoothingEnabled = false;
+
+        this.tiles = [];
         for (let y = 0; y < countY; y++) {
             for (let x = 0; x < countX; x++) {
                 let tile = new Tile(
@@ -44,7 +82,6 @@ export default class Panel {
                     y * this.size.height * this.scale + (y + 1) * this.border,
                     this.size.width * this.scale,
                     this.size.height * this.scale,
-                    false,
                     this.ctx,
                     {
                         img: this.palet,
@@ -58,10 +95,11 @@ export default class Panel {
                             (y + 1) * this.paletData.border.y,
                         wigth: this.size.width,
                         height: this.size.height,
-                    }
+                    },
+                    this.outline
                 );
                 tile.draw();
-                console.log(tile);
+                this.tiles.push(tile);
             }
         }
     }
