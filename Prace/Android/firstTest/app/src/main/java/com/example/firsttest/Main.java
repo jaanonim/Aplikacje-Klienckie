@@ -21,7 +21,19 @@ public class Main extends AppCompatActivity {
 
         LinearLayout btn2 = findViewById(R.id.btn2);
         btn2.setOnClickListener((v)->{
+            Intent intent = new Intent(Main.this,Search.class);
+            startActivity(intent);
+        });
+
+        LinearLayout btn3 = findViewById(R.id.btn3);
+        btn3.setOnClickListener((v)->{
             Intent intent = new Intent(Main.this,Gallery.class);
+            startActivity(intent);
+        });
+
+        LinearLayout btn4 = findViewById(R.id.btn4);
+        btn4.setOnClickListener((v)->{
+            Intent intent = new Intent(Main.this,Add.class);
             startActivity(intent);
         });
     }

@@ -42,6 +42,13 @@ public class Account extends AppCompatActivity {
             startActivity(intent);
         });
 
+        gridView.setOnItemClickListener((a,v,i,l)-> {
+            Intent intent = new Intent(Account.this,Photo.class);
+            intent.putExtra("photo", array[i]);
+            startActivity(intent);
+
+        });
+
     }
 
     @Override

@@ -65,7 +65,7 @@
                     android:id="@+id/btn2_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_settings_24" />
+                    app:srcCompat="@drawable/ic_baseline_search_24" />
 
                 <TextView
                     android:id="@+id/btn2_text"
@@ -95,7 +95,7 @@
                     android:id="@+id/btn3_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_settings_24" />
+                    app:srcCompat="@drawable/ic_baseline_image_24" />
 
                 <TextView
                     android:id="@+id/btn3_text"
@@ -117,13 +117,13 @@
                     android:id="@+id/btn4_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/ic_baseline_add_24" />
 
                 <TextView
                     android:id="@+id/btn4_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/rolka_title"
+                    android:text="@string/add_title"
                     android:textAlignment="center" />
             </LinearLayout>
 

@@ -31,9 +31,7 @@ public class Edit extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        checkPermission(Manifest.permission.CAMERA, 100);
-
-    openCam();
+        //openCamera();
     }
 
     @Override
@@ -45,7 +43,13 @@ public class Edit extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkPermission(String permission, int requestCode) {
+    //---------------------------------------------------------------
+
+    public void openCamera(){
+        checkPermission(Manifest.permission.CAMERA, 100);
+    }
+
+    private void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(Edit.this, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(Edit.this, new String[]{permission}, requestCode);
         } else {
@@ -53,7 +57,7 @@ public class Edit extends AppCompatActivity {
         }
     }
 
-    public void openCam(){
+    private void openCam(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 100);
@@ -67,7 +71,7 @@ public class Edit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 Bitmap b = (Bitmap) extras.get("data");
-                Log.d("xxx", b.getWidth() +" - "+b.getHeight());
+                Log.d("AAA", b.getWidth() +" - "+b.getHeight());
             }
         }
     }
@@ -79,6 +83,7 @@ public class Edit extends AppCompatActivity {
             case 100:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCam();
                 }
                 break;
         }
