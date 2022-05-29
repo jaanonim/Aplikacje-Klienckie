@@ -1,6 +1,5 @@
 const Model = require("./Class");
 const Db = require("../../utilities/Db");
-const logger = require("../../utilities/Logger");
 const ObjectId = require("mongodb").ObjectId;
 
 class MongoDb extends Model {
