@@ -1,5 +1,5 @@
 const logger = require("./Logger");
-const mongoClient = require("mongodb").MongoClient;
+const MongoClient = require("mongodb").MongoClient;
 module.exports = class Db {
     static async get(name) {
         if (Db.connections[name] == null) {
@@ -15,12 +15,9 @@ module.exports = class Db {
 
     static connections = {};
 
-    static db_mongo() {
-        return new Promise((res, rej) => {
-            mongoClient.connect(process.env.DB_URL, (err, db) => {
-                if (err) rej(err);
-                else res(db);
-            });
-        });
+    static async db_mongo() {
+        const client = new MongoClient(process.env.DB_URL);
+        await client.connect();
+        return client.db(process.env.DB_NAME);
     }
 };

@@ -17,7 +17,6 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
         }
         const res = await Promise.all(
             files.map(async (ele) => {
-                console.log(ele);
                 const newObj = await this.Model.create({
                     user: user._id,
                     description: description || "",

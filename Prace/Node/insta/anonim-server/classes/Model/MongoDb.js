@@ -1,75 +1,41 @@
 const Model = require("./Class");
 const Db = require("../../utilities/Db");
 const logger = require("../../utilities/Logger");
-const ObjectID = require("mongodb").ObjectID;
+const ObjectId = require("mongodb").ObjectId;
 
 class MongoDb extends Model {
     static async setup() {
         const db = await Db.get("mongo");
-        db.createCollection(this.name, (err, coll) => {
-            if (err) {
-                logger.error(err);
-            } else {
-                this.collection = coll;
-            }
-        });
+        this.collection = await db.collection(this.name);
     }
 
-    static _find(id) {
-        return new Promise((res, rej) => {
-            this.collection.find({ _id: ObjectID(id) }).toArray((err, data) => {
-                if (err) rej(err);
-                else res(data[0]);
-            });
-        });
+    static async _find(id) {
+        const res = await this.collection.findOne({ _id: ObjectId(id) });
+        return res;
     }
 
-    static _findAll(findData) {
-        return new Promise((res, rej) => {
-            this.collection.find(findData).toArray((err, data) => {
-                if (err) rej(err);
-                else res(data);
-            });
-        });
+    static async _findAll(findData) {
+        const res = await this.collection.find(findData);
+        return await res.toArray();
     }
 
-    static _create(obj) {
-        return new Promise((res, rej) => {
-            this.collection.insert(obj, (err, data) => {
-                if (err) rej(err);
-                else res(data.ops[0]);
-            });
-        });
+    static async _create(obj) {
+        const res = await this.collection.insertOne(obj);
+        return await this._find(res.insertedId);
     }
 
-    static _update(id, obj) {
+    static async _update(id, obj) {
         if (obj._id) {
             delete obj._id;
         }
-
-        return new Promise((res, rej) => {
-            this.collection.updateOne(
-                { _id: ObjectID(id) },
-                { $set: obj },
-                (err, data) => {
-                    if (err) rej(err);
-                    else
-                        this._find(id).then((v) => {
-                            res(v);
-                        });
-                }
-            );
-        });
+        await this.collection.updateOne({ _id: ObjectId(id) }, { $set: obj });
+        return await this._find(id);
     }
 
-    static _delete(id) {
-        return new Promise((res, rej) => {
-            const obj = this._find(id);
-            this.collection.remove({ _id: ObjectID(id) }, (err, data) => {
-                if (err) rej(err);
-                else res(obj);
-            });
-        });
+    static async _delete(id) {
+        const obj = await this._find(id);
+        await this.collection.deleteOne({ _id: ObjectId(id) });
+        return obj;
     }
 }
 

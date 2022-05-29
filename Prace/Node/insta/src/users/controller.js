@@ -56,6 +56,7 @@ const UserControler = new ControlerFactory("User", UserModel).create({
         value.profileImg = null; //TODO: add default profile image
 
         const res = await this.Model.create(value);
+        delete res.password;
         ctx.sendCodeJson(201, res);
 
         const token = await JWToken.createToken({
