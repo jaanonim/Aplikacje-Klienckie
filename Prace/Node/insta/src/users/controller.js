@@ -3,6 +3,9 @@ const UserModel = require("./model");
 const PassCrypto = require("../../anonim-server/utilities/PassCrypto");
 const Mail = require("../../anonim-server/utilities/Mail");
 const JWToken = require("../../anonim-server/utilities/JWToken");
+const Server = require("../../anonim-server/classes/Server");
+const path = require("path");
+const fs = require("fs").promises;
 
 const UserControler = new ControlerFactory("User", UserModel).create({
     async create(ctx) {
@@ -154,11 +157,21 @@ const UserControler = new ControlerFactory("User", UserModel).create({
             lastName: false,
             email: false,
         });
+        const user = await ctx.getUser();
+
         const profileImg = ctx.getFile("file")[0];
         if (profileImg) {
-            value.profileImg = profileImg.filepath;
+            const folderPath = path.join(
+                Server.config.formidable.uploadDir,
+                "" + user._id
+            );
+            const filePath = path.join(folderPath, profileImg.newFilename);
+            await fs.mkdir(folderPath, { recursive: true });
+            await fs.rename(profileImg.filepath, filePath);
+
+            value.profileImg = path.relative("static", filePath);
         }
-        const user = await ctx.getUser();
+
         const res = await this.Model.update(user._id, value);
         delete res.password;
         ctx.sendCodeJson(200, res);

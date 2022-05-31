@@ -5,6 +5,8 @@ const fs = require("fs").promises;
 const sharp = require("sharp");
 const FILTERS = require("./filters");
 const TagModel = require("../tags/model");
+const Server = require("../../anonim-server/classes/Server");
+const path = require("path");
 
 const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
     async create(ctx) {
@@ -17,16 +19,25 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
         }
         const res = await Promise.all(
             files.map(async (ele) => {
+                const folderPath = path.join(
+                    Server.config.formidable.uploadDir,
+                    "" + user._id
+                );
+                const filePath = path.join(folderPath, ele.newFilename);
+                await fs.mkdir(folderPath, { recursive: true });
+                await fs.rename(ele.filepath, filePath);
+                const pathRes = path.relative("static", filePath);
+
                 const newObj = await this.Model.create({
                     user: user._id,
                     description: description || "",
-                    url: ele.filepath,
+                    url: pathRes,
                     orginalName: ele.originalFilename,
                     lastChange: 0,
                     history: [
                         {
                             id: 0,
-                            url: ele.filepath,
+                            url: pathRes,
                             status: "original",
                             timestamp: Date.now(),
                         },
@@ -53,13 +64,15 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
             ctx.sendCodeJson(403, { error: "Forbitten" });
             return;
         }
-        const url = photo.url;
 
-        try {
-            await fs.unlink(url);
-        } catch (e) {
-            logger.error(e);
-        }
+        photo.history.forEach(async (ele) => {
+            try {
+                const filePath = path.join("static", ele.url);
+                await fs.unlink(filePath);
+            } catch (e) {
+                logger.error(e);
+            }
+        });
 
         ctx.sendCodeJson(204, await this.Model.delete(id));
     },
@@ -112,8 +125,7 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
             return;
         }
 
-        const url = photo.url;
-        if (!url) {
+        if (!photo.url) {
             ctx.sendCodeJson(400, { error: "Something went wrong." });
             return;
         }
@@ -131,6 +143,7 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
             photo.tags = tags;
         }
 
+        let urlRes = photo.url;
         if (method) {
             if (!FILTERS.some((ele) => method === ele.name)) {
                 ctx.sendCodeJson(400, { error: "Invalid method." });
@@ -141,6 +154,7 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
                 ctx.sendCodeJson(400, { error: "Something went wrong." });
                 return;
             }
+            const url = path.join("static", photo.url);
 
             photo.lastChange = photo.history.length;
             const newUrl = `${url}-${photo.lastChange}`;
@@ -156,9 +170,10 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
                 return;
             }
 
+            urlRes = path.relative("static", newUrl);
             photo.history.push({
                 id: photo.lastChange,
-                url: newUrl,
+                url: urlRes,
                 status: method,
                 timestamp: Date.now(),
             });
@@ -166,6 +181,7 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
 
         ctx.sendJson(
             await this.Model.update(id, {
+                url: urlRes,
                 lastChange: photo.lastChange,
                 history: photo.history,
                 tags: photo.tags,
@@ -186,11 +202,14 @@ const PhotoControler = new ControlerFactory("Photo", PhotoModel).create({
                     error: "Forbitten",
                 });
             } else {
-                try {
-                    await fs.unlink(photo.url);
-                } catch (e) {
-                    logger.error(e);
-                }
+                photo.history.forEach(async (ele) => {
+                    try {
+                        const filePath = path.join("static", ele.url);
+                        await fs.unlink(filePath);
+                    } catch (e) {
+                        logger.error(e);
+                    }
+                });
                 res.push(await this.Model.delete(id));
             }
         });
