@@ -27,7 +27,7 @@ A repository for school lessons, client and server applications.
 -   PHP
 -   Java
 -   Spark
--   Hosting: Heroku, DETA
+-   Android
 
 ---
 
