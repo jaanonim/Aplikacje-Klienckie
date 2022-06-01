@@ -26,19 +26,18 @@ import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class Edit extends AppCompatActivity {
+public class Edit extends AppScreen {
+
+    @Override
+    protected int getView() {
+        return R.layout.activity_edit;
+    }
 
     ImageView profileImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         profileImg = findViewById(R.id.profileEdit);
         updateImg();
@@ -56,15 +55,7 @@ public class Edit extends AppCompatActivity {
         Button btnGal = findViewById(R.id.btnGal);
         btnGal.setOnClickListener((v) -> openGallery());
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    
 
     //---------------------------------------------------------------
 

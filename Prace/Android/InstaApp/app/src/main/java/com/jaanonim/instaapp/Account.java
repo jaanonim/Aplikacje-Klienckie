@@ -13,11 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Account extends AppCompatActivity {
+public class Account extends AppScreen {
 
     String[] array = new String[]{"a", "b", "c"};
 
     ImageView profileImg;
+
+    @Override
+    protected int getView() {
+        return R.layout.activity_account;
+    }
 
     public void updateImg() {
         if (LocalDb.profileImage != null) {
@@ -34,12 +39,6 @@ public class Account extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         GridView gridView = findViewById(R.id.grid1);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -68,12 +67,4 @@ public class Account extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
