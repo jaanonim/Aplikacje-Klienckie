@@ -77,8 +77,8 @@ public class Edit extends AppScreen {
     }
 
     private void checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(Edit.this, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(Edit.this, new String[]{permission}, requestCode);
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
         } else {
             openCam();
         }

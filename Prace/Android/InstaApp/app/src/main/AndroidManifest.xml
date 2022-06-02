@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InstaApp">
         <activity
+            android:name=".EditTag"
+            android:exported="true" />
+        <activity
             android:name=".EditPhoto"
             android:exported="true" />
         <activity

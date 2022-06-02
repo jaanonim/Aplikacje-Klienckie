@@ -34,4 +34,6 @@ public abstract class AppScreen extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

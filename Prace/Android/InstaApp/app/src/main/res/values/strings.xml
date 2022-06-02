@@ -7,4 +7,5 @@
     <string name="add_title">Add</string>
     <string name="title_activity_search">Search</string>
     <string name="save">Save</string>
+    <string name="title_activity_edit_tags">EditTags</string>
 </resources>
