@@ -18,7 +18,8 @@ class Manager {
                     startPos: { x: 3, y: 215 },
                     endPos: { x: 50, y: 230 },
                 },
-            }
+            },
+            this.onSelect.bind(this)
         );
         this.board = new Board(
             document.getElementById("board"),
@@ -42,6 +43,10 @@ class Manager {
                 },
             }
         );
+    }
+
+    onSelect(tile) {
+        this.board.setTiles(tile);
     }
 }
 

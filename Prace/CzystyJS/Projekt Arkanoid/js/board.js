@@ -44,8 +44,6 @@ export default class Board {
     }
 
     keydown(e) {
-        if (e.key === "Delete") {
-        }
         if (e.key === "Control") {
             this.isCtrl = true;
         }
@@ -53,6 +51,7 @@ export default class Board {
 
     keyup(e) {
         if (e.key === "Delete") {
+            this.setTiles({ img: null });
         }
         if (e.key === "Control") {
             this.isCtrl = false;
@@ -133,7 +132,6 @@ export default class Board {
     }
 
     mouseup(e) {
-        console.log(this.higthligthedTiles);
         this.startPos = null;
         if (this.higthligthedTiles.length < 1) return;
         if (this.isCtrl) {
@@ -200,5 +198,12 @@ export default class Board {
                 this.tiles.push(tile);
             }
         }
+    }
+
+    setTiles(tile) {
+        this.selectedTiles.forEach((ele) => {
+            ele.setImg(tile.img);
+        });
+        this.unselectTiles([...this.selectedTiles]);
     }
 }

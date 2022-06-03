@@ -1,12 +1,13 @@
 import Tile from "./tile.js";
 
 export default class Panel {
-    constructor(html, size, config) {
+    constructor(html, size, config, onSelect) {
         this.html = html;
         this.size = size;
         this.outline = config.outline;
         this.border = config.border;
         this.scale = config.scale;
+        this.onSelect = onSelect;
         this.paletData = config.paletData;
 
         this.setupImg();
@@ -48,7 +49,7 @@ export default class Panel {
                 tile.y < e.offsetY &&
                 e.offsetY < tile.y + tile.height
             ) {
-                tile.click();
+                this.onSelect(tile);
             }
         }
     }

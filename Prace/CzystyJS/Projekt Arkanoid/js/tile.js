@@ -88,4 +88,9 @@ export default class Tile {
             height: this.height + this.borderSize * 2,
         };
     }
+
+    setImg(img) {
+        this.img = img;
+        this.draw();
+    }
 }
