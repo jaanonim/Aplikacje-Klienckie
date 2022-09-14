@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const data = [
+                {
+                    id: 1,
+                    task: {
+                        action: "kupic",
+                        target: "maslo",
+                    },
+                    count: 2,
+                },
+                {
+                    id: 2,
+                    task: {
+                        action: "upiec",
+                        target: "chleb",
+                    },
+                    count: 6,
+                },
+                {
+                    id: 3,
+                    task: {
+                        action: "wylac",
+                        target: "mleko",
+                    },
+                    count: 3,
+                },
+            ];
+            class Root extends React.Component {
+                render() {
+                    return (
+                        <>
+                            {this.props.data.map((ele) => (
+                                <Element data={ele} />
+                            ))}
+                        </>
+                    );
+                }
+            }
+            class Element extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                backgroundColor: "orange",
+                                padding: "10px",
+                                display: "inline-block",
+                                color: "#fff",
+                            }}
+                        >
+                            <Property
+                                bg="blue"
+                                name="Id"
+                                content={this.props.data.id}
+                            />
+                            <Property
+                                bg="red"
+                                name="Zadanie"
+                                content={
+                                    this.props.data.task.action +
+                                    "->" +
+                                    this.props.data.task.target
+                                }
+                            />
+                            <Property
+                                bg="green"
+                                name="Ile"
+                                content={this.props.data.count}
+                            />
+                        </div>
+                    );
+                }
+            }
+            class Property extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                backgroundColor: this.props.bg,
+                                padding: "10px",
+                                margin: "5px",
+                            }}
+                        >
+                            <h2>{this.props.name}:</h2> {this.props.content}
+                        </div>
+                    );
+                }
+            }
+            ReactDOM.render(
+                <Root data={data} />,
+                document.getElementById("root"),
+            );
+        </script>
+    </body>
+</html>

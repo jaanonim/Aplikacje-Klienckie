@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const list3 = [1, 2, 3];
+
+            class Red extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                border: "5px solid red",
+                                backgroundColor: "red",
+                                color: "#fff",
+                                margin: "10px",
+                            }}
+                        >
+                            Element
+                        </div>
+                    );
+                }
+            }
+            class Blue extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                border: "5px solid blue",
+                                padding: "10px",
+                                display: "flex",
+                            }}
+                        >
+                            {list3.map((e) => (
+                                <Red />
+                            ))}
+                        </div>
+                    );
+                }
+            }
+            class Green extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                border: "5px solid green",
+                                padding: "10px",
+                            }}
+                        >
+                            {list3.map((e) => (
+                                <Blue />
+                            ))}
+                        </div>
+                    );
+                }
+            }
+
+            class Root extends React.Component {
+                render() {
+                    return (
+                        <div
+                            style={{
+                                border: "5px solid orange",
+                                padding: "10px",
+                                display: "flex",
+                            }}
+                        >
+                            {list3.map((e) => (
+                                <Green />
+                            ))}
+                        </div>
+                    );
+                }
+            }
+
+            ReactDOM.render(<Root />, document.getElementById("root"));
+        </script>
+    </body>
+</html>

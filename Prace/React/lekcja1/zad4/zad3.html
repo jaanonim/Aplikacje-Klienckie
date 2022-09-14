@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            async function f() {
+                const res = await fetch("http://localhost:5000");
+                const data = await res.json();
+
+                function Root({ data }) {
+                    return (
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                            }}
+                        >
+                            {data.map((ele) => (
+                                <Element data={ele} />
+                            ))}
+                        </div>
+                    );
+                }
+
+                const Element = ({ data }) => {
+                    return (
+                        <div
+                            style={{
+                                backgroundColor: "orange",
+                                padding: "5px",
+                                display: "inline-block",
+                                color: "#fff",
+                                width: "150px",
+                                height: "200px",
+                                margin: "10px",
+                                position: "relative",
+                                textAlign: "center",
+                            }}
+                        >
+                            <h2 style={{ fontSize: "1rem" }}>{data.title}</h2>
+                            <img
+                                style={{
+                                    width: "100px",
+                                }}
+                                src={data.product_url}
+                            />
+                            <Starts count={data.stars} src={data.img_url} />
+                        </div>
+                    );
+                };
+
+                const Starts = ({ count, src }) => {
+                    const tab = [];
+                    for (let i = 0; i < count; i++) {
+                        tab.push(<img src={src} width="20px" alt="star" />);
+                    }
+                    return (
+                        <div
+                            style={{
+                                position: "absolute",
+                                left: 0,
+                                bottom: 0,
+                                width: "100%",
+                                backgroundColor: "rgba(0,0,0,0.5)",
+                                paddingTop: "3px",
+                            }}
+                        >
+                            {tab}
+                        </div>
+                    );
+                };
+
+                ReactDOM.render(
+                    <Root data={data.items} />,
+                    document.getElementById("root"),
+                );
+            }
+            f();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script>
+            const red = React.createElement(
+                "div",
+                {
+                    className: "element",
+                    style: {
+                        border: "5px solid red",
+                        backgroundColor: "red",
+                        color: "#fff",
+                        margin: "10px",
+                    },
+                },
+                "Element",
+            );
+            const blue = React.createElement(
+                "div",
+                {
+                    className: "element",
+                    style: {
+                        border: "5px solid blue",
+                        padding: "10px",
+                        display: "flex",
+                    },
+                },
+                [red, red, red],
+            );
+
+            const green = React.createElement(
+                "div",
+                {
+                    className: "element",
+                    style: {
+                        border: "5px solid green",
+                        padding: "10px",
+                    },
+                },
+                [blue, blue, blue],
+            );
+
+            const root = React.createElement(
+                "div",
+                {
+                    className: "element",
+                    style: {
+                        border: "5px solid orange",
+                        padding: "10px",
+                        display: "flex",
+                    },
+                },
+                [green, green, green],
+            );
+
+            ReactDOM.render(root, document.getElementById("root"));
+        </script>
+    </body>
+</html>
