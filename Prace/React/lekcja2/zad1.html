@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const Stoper = () => {
+                const [time, setTime] = React.useState(0);
+                const [int, setInt] = React.useState(null);
+                const claaback = React.useCallback(() => {
+                    if (int) {
+                        clearInterval(int);
+                        setInt(null);
+                    } else {
+                        const i = setInterval(() => {
+                            setTime((t) => t + 1);
+                        }, 1000);
+                        setInt(i);
+                    }
+                });
+                return (
+                    <>
+                        {parseInt(time / 60) + ":" + (time % 60)}
+                        <button onClick={claaback}>
+                            {int == null ? "start" : "stop"}
+                        </button>
+                    </>
+                );
+            };
+
+            ReactDOM.render(
+                <>
+                    <Stoper />
+                    <Stoper />
+                    <Stoper />
+                    <Stoper />
+                    <Stoper />
+                    <Stoper />
+                    <Stoper />
+                </>,
+                document.getElementById("root"),
+            );
+        </script>
+    </body>
+</html>
