@@ -28,6 +28,8 @@ A repository for school lessons, client and server applications.
 -   Java
 -   Spark
 -   Android
+-   React
+-   TypeScript
 
 ---
 
