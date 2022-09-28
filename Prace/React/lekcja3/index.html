@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@17.0.2/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+        <style>
+            body {
+                background-color: #333;
+                color: #fff;
+            }
+            .component {
+                border-radius: 10px;
+                border: 2px solid #fff;
+                padding: 0.5rem;
+                margin: 0.5rem;
+            }
+            h2 {
+                margin: 0;
+                padding: 0;
+            }
+            .edit {
+                display: block;
+                width: 100%;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const Comment = ({ data, id, update }) => {
+                const [edit, setEdit] = React.useState(false);
+                const [value, setValue] = React.useState(data.text);
+
+                return (
+                    <div className="component">
+                        |{data.date}|:{" "}
+                        {edit ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => {
+                                        setValue(e.target.value);
+                                    }}
+                                />
+                                <input
+                                    type="submit"
+                                    value="save"
+                                    onClick={async () => {
+                                        setEdit(false);
+                                        const d = await (
+                                            await fetch(
+                                                `http://localhost:3000/${id}/comment/${data.id}/`,
+                                                {
+                                                    method: "POST",
+                                                    body: JSON.stringify({
+                                                        text: value,
+                                                    }),
+                                                },
+                                            )
+                                        ).json();
+                                        update();
+                                    }}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                {value}
+                                <button
+                                    onClick={() => {
+                                        setEdit(true);
+                                    }}
+                                >
+                                    Edit
+                                </button>
+                            </>
+                        )}
+                        <div className="edit">
+                            <button
+                                onClick={async () => {
+                                    const d = await (
+                                        await fetch(
+                                            `http://localhost:3000/${id}/comment/${data.id}/`,
+                                        )
+                                    ).json();
+                                    update();
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            const CommentList = ({ data, id, update }) => {
+                return data.map((ele, i) => (
+                    <Comment key={i} data={ele} id={id} update={update} />
+                ));
+            };
+
+            const Form = ({ id, update }) => {
+                const input = React.useRef(null);
+
+                return (
+                    <form
+                        onSubmit={async (e) => {
+                            e.preventDefault();
+                            const v = input.current.value;
+                            input.current.value = "";
+                            if (v && v.length > 0) {
+                                const d = await (
+                                    await fetch(
+                                        `http://localhost:3000/${id}/comment/`,
+                                        {
+                                            method: "POST",
+                                            body: JSON.stringify({
+                                                text: v,
+                                            }),
+                                        },
+                                    )
+                                ).json();
+                                update();
+                            }
+                        }}
+                    >
+                        <textarea ref={input}></textarea>
+                        <input type="submit" value="send" />
+                    </form>
+                );
+            };
+
+            const AddThread = ({ update }) => {
+                const input = React.useRef(null);
+
+                return (
+                    <form
+                        onSubmit={async (e) => {
+                            e.preventDefault();
+                            const v = input.current.value;
+                            input.current.value = "";
+                            if (v && v.length > 0) {
+                                const d = await (
+                                    await fetch(`http://localhost:3000/`, {
+                                        method: "POST",
+                                        body: JSON.stringify({
+                                            name: v,
+                                        }),
+                                    })
+                                ).json();
+                                update();
+                            }
+                        }}
+                    >
+                        <input type="text" ref={input} />
+                        <input type="submit" value="send" />
+                    </form>
+                );
+            };
+
+            const Thread = ({ data, update }) => {
+                return (
+                    <div className="component">
+                        <h2>{data.thread}</h2>
+                        <CommentList
+                            data={data.comments}
+                            id={data.id}
+                            update={update}
+                        />
+                        <Form id={data.id} update={update} />
+                    </div>
+                );
+            };
+
+            const Root = () => {
+                const [data, setData] = React.useState(null);
+                const update = React.useCallback(async () => {
+                    const d = await (
+                        await fetch("http://localhost:3000")
+                    ).json();
+                    setData(d);
+                });
+                React.useEffect(() => {
+                    update();
+                }, []);
+
+                return (
+                    <>
+                        {data ? (
+                            data.map((ele, i) => (
+                                <Thread key={i} data={ele} update={update} />
+                            ))
+                        ) : (
+                            <h1>No data</h1>
+                        )}
+                        <AddThread update={update} />
+                    </>
+                );
+            };
+
+            ReactDOM.render(<Root />, document.getElementById("root"));
+        </script>
+    </body>
+</html>
