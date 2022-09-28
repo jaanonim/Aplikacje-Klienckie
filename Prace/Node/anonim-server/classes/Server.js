@@ -1,37 +1,78 @@
-const createServer = require('../utilities/Server')
-const logger = require('../utilities/Logger')
-const Route = require('./Route')
+const createServer = require("../utilities/Server");
+const logger = require("../utilities/Logger");
+
+const Route = require("./Route");
+
+require("dotenv").config();
 
 module.exports = class Server {
+    static config = {
+        jsonParser: false,
+        port: process.env.PORT || 3000,
+        static: "./static",
+        formidable: {
+            uploadDir: "./static/uploads",
+        },
+        middlewares: [],
+        JWT: {
+            expiresIn: "1d",
+        },
+        cors: "*",
+        charset: "utf-8",
+    };
+    /*
+        Options for config:
+        - jsonParser:bool
+        - port:number
+        - static:string
+        - formidable:object
+        - JWT:object
+        - middlewares:list of strings (start with "@" for build in middlewares)
+        - cors:string
+        - charset:string
+    */
 
     constructor() {
         this.endpoints = [];
-        this.config = {
-            jsonParser: false,
-            port: process.env.PORT || 3000,
-            static: './static'
-        };
-        /*
-            Options for config:
-            - jsonParser:bool
-            - port:number
-            - static:string
-        */
-
 
         this.root = new Route();
     }
 
-    listen() {
-        this.endpoints = this.root.translate("");
-        console.log(this.endpoints);
-        this.server = createServer(this.config, this.endpoints);
-        this.server.listen(this.config.port, () => {
-            logger.info(`Server is listening on http://localhost:${this.config.port}`);
+    initMiddlewares() {
+        Server.config.middlewares.forEach((mid) => {
+            if (mid[0] === "@") {
+                mid = "./Middleware/default/" + mid.slice(1);
+            } else {
+                mid = "../../" + mid;
+            }
+            require(mid);
         });
     }
 
-    setConfig(key, value) {
-        this.config[key] = value;
+    listen() {
+        this.initMiddlewares();
+        this.endpoints = this.root.translate("");
+        this.server = createServer(Server.config, this.endpoints);
+        this.server.listen(Server.config.port, () => {
+            logger.info(
+                `Server is listening on http://localhost:${Server.config.port}`,
+            );
+        });
     }
-}
+
+    loadConfig(config) {
+        this._tryLoadConfigObj(config.default);
+        this._tryLoadConfigObj(config[process.env.NODE_ENV]);
+    }
+
+    _tryLoadConfigObj(obj) {
+        if (obj)
+            Object.keys(obj).forEach((key) => {
+                this.setConfig(key, obj[key]);
+            });
+    }
+
+    setConfig(key, value) {
+        Server.config[key] = value;
+    }
+};
