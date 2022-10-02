@@ -8,14 +8,14 @@ app.get("/", async (req, res) => {
     // CODE
     if (!req.query.url) res.send({ error: "error" });
 
-    res.send(await getData(req.query.url, 1000000000, 3));
+    res.send(await getData(req.query.url, 10, 3));
 });
 
 const visitedLinks = [];
 const getData = async (url, count, depth) => {
+    const originalUrl = url;
     console.log(depth, url);
 
-    const originalUrl = url;
     visitedLinks.push(url);
     let data;
     try {
@@ -36,10 +36,12 @@ const getData = async (url, count, depth) => {
     if (url[url.length - 1] == "/") {
         url = url.slice(0, -1);
     }
+    url = url.replace(/#.*/g, "");
 
     const currentUrl = url;
     const preurls = data.data.match(/<a.*href=".+?"/gm);
     const mails = data.data.match(/[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.../gm);
+    console.log(mails);
     let urls = [];
     if (preurls)
         preurls.forEach((s) => {
