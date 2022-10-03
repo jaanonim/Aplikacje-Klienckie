@@ -6,3 +6,26 @@ body {
     width: 100vw;
     height: 100vh;
 }
+
+#root {
+    display: grid;
+    grid-template-columns: repeat(var(--sizeX), 50px);
+}
+
+#list {
+    margin-right: 1rem;
+    float: left;
+}
+
+.node {
+    width: 50px;
+    height: 50px;
+    border: 1px #fff solid;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 50%;
+}
