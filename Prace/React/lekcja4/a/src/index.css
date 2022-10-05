@@ -1,0 +1,32 @@
+body{
+  background-color: #333;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+
+button{
+  padding: 0.5rem;
+  text-align: center;
+  margin: 0.5rem;
+  border: 2px #fff solid;
+  border-radius: 0.5rem;
+  background-color: #303030;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+button:hover{
+  background-color: #222;
+}
+
+.item{
+  padding: 1rem;
+  margin: 1rem;
+  
+  border: 2px #fff solid;
+  border-radius: 0.5rem;
+  display: inline-block;
+}
