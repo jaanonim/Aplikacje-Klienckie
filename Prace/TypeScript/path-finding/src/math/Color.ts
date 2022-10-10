@@ -102,4 +102,8 @@ export default class Color {
         this.a = clamp(this.a + v.a, 0, 255);
         return this;
     }
+
+    equals(v: Color) {
+        return v.r == this.r && v.g == this.g && v.b == this.b && v.a == this.a;
+    }
 }

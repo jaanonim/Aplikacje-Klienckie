@@ -1,5 +1,6 @@
 import Color from "./math/Color";
 import Map from "./Map";
+import Vector2 from "./math/Vector2";
 
 export default class Node {
     x: number;
@@ -55,5 +56,14 @@ export default class Node {
 
     setHover() {
         this.html.style.backgroundColor = Color.gray.getStringRGBA();
+    }
+
+    countInDir(dir: Vector2, map: Map): Array<Node> {
+        const n = map.getNode(new Vector2(dir.x + this.x, dir.y + this.y));
+        if (n && n.color.equals(this.color)) {
+            return [...n.countInDir(dir, map), this];
+        } else {
+            return [this];
+        }
     }
 }

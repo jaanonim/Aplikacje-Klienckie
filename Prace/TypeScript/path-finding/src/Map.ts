@@ -12,14 +12,29 @@ export default class Map {
     hovered: Array<Node>;
     selected: Node | null;
     colors: Array<Color>;
+    lock: boolean;
     nextColorsHtml: HTMLElement;
+    pointsHtml: HTMLElement;
+    private _points: number;
+
+    public get points(): number {
+        return this._points;
+    }
+    public set points(value: number) {
+        this._points = value;
+        this.pointsHtml.innerHTML = value + " points";
+    }
 
     constructor(
         sizeX: number,
         sizeY: number,
         html: HTMLElement,
-        nextColorsHtml: HTMLElement
+        nextColorsHtml: HTMLElement,
+        pointsHtml: HTMLElement
     ) {
+        this.pointsHtml = pointsHtml;
+        this._points = 0;
+        this.points = 0;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.map = [];
@@ -28,6 +43,7 @@ export default class Map {
         this.html = html;
         this.hovered = [];
         this.selected = null;
+        this.lock = false;
         this.html.style.setProperty("--sizeX", "" + this.sizeX);
         this.html.style.setProperty("--sizeY", "" + this.sizeY);
         this.nextColorsHtml = nextColorsHtml;
@@ -125,13 +141,28 @@ export default class Map {
     }
 
     unsetNode(node: Node) {
+        if (this.map[node.x][node.y].isWalkable) return false;
         this.map[node.x][node.y].unset();
         this.free.push(this.map[node.x][node.y]);
+        return true;
+    }
+
+    getNode(pos: Vector2) {
+        try {
+            return this.map[pos.x][pos.y];
+        } catch {
+            return undefined;
+        }
     }
 
     spawnRandom(color: Color) {
+        if (this.free.length === 0) {
+            alert(`You died with ${this.points} points`);
+            return;
+        }
         const ele = getRandom(this.free);
         this.setNode(ele, color);
+        this.checkAndRemove(ele);
     }
 
     spawnRandom3(color: [Color, Color, Color]) {
@@ -142,6 +173,7 @@ export default class Map {
     }
 
     hover(node: Node) {
+        if (this.lock) return;
         if (this.selected) {
             const res = this.findPath(this.selected, node);
             if (res != null) {
@@ -153,15 +185,23 @@ export default class Map {
     }
 
     select(node: Node) {
+        if (this.lock) return;
         if (this.selected) {
-            if (node.isWalkable) {
+            if (this.selected === node) {
+                this.selected = null;
+                node.unsetHover();
+            } else if (node.isWalkable) {
                 if (null! + this.findPath(this.selected, node)) {
                     this.setNode(node, this.selected.color);
-
                     this.unsetNode(this.selected);
-                    this.selected = null;
-                    this.hovered.forEach((n) => n.unsetHover());
-                    this.spawnRandom3(this.colors as [Color, Color, Color]);
+                    this.lock = true;
+                    setTimeout(() => {
+                        this.checkAndRemove(node);
+                        this.selected = null;
+                        this.hovered.forEach((n) => n.unsetHover());
+                        this.spawnRandom3(this.colors as [Color, Color, Color]);
+                        this.lock = false;
+                    }, 500);
                 }
                 return;
             } else {
@@ -169,10 +209,33 @@ export default class Map {
                 this.hover(node);
             }
         } else {
-            if (!node.isWalkable) {
+            if (
+                !node.isWalkable &&
+                this.getAdjacentNodes(node, []).length > 0
+            ) {
                 this.selected = node;
                 this.hover(node);
             }
         }
+    }
+
+    checkAndRemove(node: Node) {
+        const DIR = [
+            [new Vector2(1, 0), new Vector2(-1, 0)],
+            [new Vector2(0, 1), new Vector2(0, -1)],
+            [new Vector2(-1, -1), new Vector2(1, 1)],
+            [new Vector2(-1, 1), new Vector2(1, -1)],
+        ];
+
+        let nodes: Array<Node> = [];
+        DIR.forEach((d) => {
+            const n = node
+                .countInDir(d[0], this)
+                .concat(node.countInDir(d[1], this));
+            if (n.length >= 6) nodes = nodes.concat(n);
+        });
+        nodes.forEach((n) => {
+            if (this.unsetNode(n)) this.points++;
+        });
     }
 }
