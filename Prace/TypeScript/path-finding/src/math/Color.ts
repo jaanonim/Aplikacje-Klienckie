@@ -72,6 +72,10 @@ export default class Color {
         return new Color(this.r, this.g, this.b, this.a);
     }
 
+    /** Multiply two colors
+     * @param can be Color or number
+     * @return modified color
+     */
     multiply(v: number | Color) {
         if (v instanceof Color) {
             this.r = map(this.r * v.r, 0, 255, 0, 255);
@@ -87,6 +91,7 @@ export default class Color {
         }
     }
 
+    /** Make colors value form 0-1 instead of 0-255*/
     normalize() {
         this.r /= 255;
         this.g /= 255;
@@ -95,6 +100,7 @@ export default class Color {
         return this;
     }
 
+    /** Add color to color and clamp values */
     add(v: Color) {
         this.r = clamp(this.r + v.r, 0, 255);
         this.g = clamp(this.g + v.g, 0, 255);
@@ -103,6 +109,7 @@ export default class Color {
         return this;
     }
 
+    /** Check if colors are equals */
     equals(v: Color) {
         return v.r == this.r && v.g == this.g && v.b == this.b && v.a == this.a;
     }

@@ -3,8 +3,8 @@ import { getRandom } from "./math/Math";
 import Vector2 from "./math/Vector2";
 import Node from "./Node";
 
-export default class Map {
-    map: Array<Array<Node>>;
+interface MapInterface {
+    readonly map: Array<Array<Node>>;
     sizeX: number;
     sizeY: number;
     html: HTMLElement;
@@ -15,11 +15,32 @@ export default class Map {
     lock: boolean;
     nextColorsHtml: HTMLElement;
     pointsHtml: HTMLElement;
+    countInLine: number;
+}
+
+export default class Map implements MapInterface {
+    readonly map: Array<Array<Node>>;
+    sizeX: number;
+    sizeY: number;
+    html: HTMLElement;
+    free: Array<Node>;
+    hovered: Array<Node>;
+    selected: Node | null;
+    colors: Array<Color>;
+    lock: boolean;
+    nextColorsHtml: HTMLElement;
+    pointsHtml: HTMLElement;
+    countInLine: number;
+
     private _points: number;
 
     public get points(): number {
         return this._points;
     }
+
+    /**
+     * set count of points and update UI
+     */
     public set points(value: number) {
         this._points = value;
         this.pointsHtml.innerHTML = value + " points";
@@ -30,7 +51,8 @@ export default class Map {
         sizeY: number,
         html: HTMLElement,
         nextColorsHtml: HTMLElement,
-        pointsHtml: HTMLElement
+        pointsHtml: HTMLElement,
+        countInLine: number
     ) {
         this.pointsHtml = pointsHtml;
         this._points = 0;
@@ -47,6 +69,7 @@ export default class Map {
         this.html.style.setProperty("--sizeX", "" + this.sizeX);
         this.html.style.setProperty("--sizeY", "" + this.sizeY);
         this.nextColorsHtml = nextColorsHtml;
+        this.countInLine = countInLine;
 
         for (let x = 0; x < sizeX; x++) {
             this.map[x] = [];
@@ -60,6 +83,9 @@ export default class Map {
         this.spawnRandom3(this.colors as [Color, Color, Color]);
     }
 
+    /**
+     * generate next batch of colors
+     */
     setNextColors() {
         const COLORS = [
             Color.red,
@@ -83,6 +109,12 @@ export default class Map {
         }
     }
 
+    /**
+     * Search path
+     * @param start
+     * @param end
+     * @returns
+     */
     findPath(start: Node, end: Node) {
         this.map.forEach((row) => row.forEach((n) => (n.previous = null)));
         let reachable = [start];
@@ -107,6 +139,12 @@ export default class Map {
         return null;
     }
 
+    /**
+     * Return nodes that are adjacent to given node excluding nodes given in notThis param
+     * @param n
+     * @param notThis exclude this nodes
+     * @returns
+     */
     getAdjacentNodes(n: Node, notThis: Array<Node>): Array<Node> {
         let tab: Array<Node> = [];
         const map = [
@@ -130,16 +168,31 @@ export default class Map {
         return tab;
     }
 
+    /**
+     * construct founded path
+     * @param n
+     * @returns
+     */
     getPath(n: Node): Array<Node> {
         if (n.previous === null) return [n];
         return [n, ...this.getPath(n.previous)];
     }
 
+    /**
+     * Sets color of node
+     * @param node
+     * @param color
+     */
     setNode(node: Node, color: Color) {
         this.map[node.x][node.y].set(color);
         this.free = this.free.filter((e) => e != this.map[node.x][node.y]);
     }
 
+    /**
+     * Removes color of node
+     * @param node
+     * @returns
+     */
     unsetNode(node: Node) {
         if (this.map[node.x][node.y].isWalkable) return false;
         this.map[node.x][node.y].unset();
@@ -147,6 +200,11 @@ export default class Map {
         return true;
     }
 
+    /**
+     * Return node at given position
+     * @param pos
+     * @returns
+     */
     getNode(pos: Vector2) {
         try {
             return this.map[pos.x][pos.y];
@@ -155,6 +213,11 @@ export default class Map {
         }
     }
 
+    /**
+     * Create random node at random pos
+     * @param color
+     * @returns
+     */
     spawnRandom(color: Color) {
         if (this.free.length === 0) {
             alert(`You died with ${this.points} points`);
@@ -165,6 +228,10 @@ export default class Map {
         this.checkAndRemove(ele);
     }
 
+    /**
+     * Create 3 random nodes at random pos
+     * @param color
+     */
     spawnRandom3(color: [Color, Color, Color]) {
         color.forEach((c) => {
             this.spawnRandom(c);
@@ -172,6 +239,11 @@ export default class Map {
         this.setNextColors();
     }
 
+    /**
+     * Handles hover event
+     * @param node
+     * @returns
+     */
     hover(node: Node) {
         if (this.lock) return;
         if (this.selected) {
@@ -184,6 +256,11 @@ export default class Map {
         }
     }
 
+    /**
+     * Handles select event
+     * @param node
+     * @returns
+     */
     select(node: Node) {
         if (this.lock) return;
         if (this.selected) {
@@ -196,11 +273,15 @@ export default class Map {
                     this.unsetNode(this.selected);
                     this.lock = true;
                     setTimeout(() => {
-                        this.checkAndRemove(node);
                         this.selected = null;
                         this.hovered.forEach((n) => n.unsetHover());
-                        this.spawnRandom3(this.colors as [Color, Color, Color]);
                         this.lock = false;
+
+                        if (!this.checkAndRemove(node)) {
+                            this.spawnRandom3(
+                                this.colors as [Color, Color, Color]
+                            );
+                        }
                     }, 500);
                 }
                 return;
@@ -219,6 +300,11 @@ export default class Map {
         }
     }
 
+    /**
+     * Check for nodes that should be removed
+     * @param node
+     * @returns
+     */
     checkAndRemove(node: Node) {
         const DIR = [
             [new Vector2(1, 0), new Vector2(-1, 0)],
@@ -232,10 +318,13 @@ export default class Map {
             const n = node
                 .countInDir(d[0], this)
                 .concat(node.countInDir(d[1], this));
-            if (n.length >= 6) nodes = nodes.concat(n);
+            if (n.length >= this.countInLine + 1) nodes = nodes.concat(n);
         });
         nodes.forEach((n) => {
             if (this.unsetNode(n)) this.points++;
         });
+        if (this.free.length === this.sizeX * this.sizeY)
+            this.spawnRandom3(this.colors as [Color, Color, Color]);
+        return nodes.length > 0;
     }
 }
