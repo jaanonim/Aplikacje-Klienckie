@@ -2,18 +2,19 @@ var express = require("express");
 var app = express();
 const axios = require("axios").default;
 
+app.use(express.static("static"));
 app.listen(5000, () => console.log("Listening on http://localhost:5000"));
 
-app.get("/", async (req, res) => {
-    // CODE
+let visitedLinks = [];
+
+app.get("/query/", async (req, res) => {
     if (!req.query.url) res.send({ error: "error" });
 
+    visitedLinks = [];
     res.send(await getData(req.query.url, 10, 3));
 });
 
-const visitedLinks = [];
 const getData = async (url, count, depth) => {
-    const originalUrl = url;
     console.log(depth, url);
 
     visitedLinks.push(url);
@@ -25,7 +26,8 @@ const getData = async (url, count, depth) => {
             responseType: "text",
         });
     } catch {
-        return url;
+        console.log(url);
+        return { urls: [url], mails: [] };
     }
 
     let r = url.match(/\/\?.*/g);
@@ -40,8 +42,9 @@ const getData = async (url, count, depth) => {
 
     const currentUrl = url;
     const preurls = data.data.match(/<a.*href=".+?"/gm);
-    const mails = data.data.match(/[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.../gm);
-    console.log(mails);
+    const mails =
+        data.data.match(/[a-zA-Z0-9-.]+@[a-zA-Z0-9-.]+\.[a-zA-Z0-9-.]+/gm) ||
+        [];
     let urls = [];
     if (preurls)
         preurls.forEach((s) => {
@@ -57,10 +60,14 @@ const getData = async (url, count, depth) => {
         });
     if (depth > 0) {
         for (let index = 0; index < Math.min(count, urls.length); index++) {
-            if (visitedLinks.indexOf(urls[index]) == -1)
-                urls[index] = await getData(urls[index], count, depth - 1);
+            if (visitedLinks.indexOf(urls[index]) == -1) {
+                const o = await getData(urls[index], count, depth - 1);
+                urls.push(...o.urls);
+                mails.push(...o.mails);
+            }
         }
     }
 
-    return { originalUrl, urls, mails };
+    console.log(urls, mails);
+    return { urls, mails };
 };
