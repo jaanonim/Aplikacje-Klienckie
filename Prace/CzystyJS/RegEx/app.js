@@ -49,7 +49,7 @@ const getData = async (url, count, depth) => {
     if (preurls)
         preurls.forEach((s) => {
             const b = s.match(/href=".+?"/)[0];
-            const res = b.slice(6, b.length - 2).trim();
+            const res = b.slice(6, b.length - 1).trim();
             if (res.length !== 0 || res !== "#") {
                 if (res.match(/http.*/gm) != null) {
                     urls.push(res);
@@ -68,6 +68,5 @@ const getData = async (url, count, depth) => {
         }
     }
 
-    console.log(urls, mails);
     return { urls, mails };
 };
