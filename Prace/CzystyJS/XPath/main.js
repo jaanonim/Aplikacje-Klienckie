@@ -27,7 +27,7 @@ function upperFirst(str) {
 
 function getDielnice() {
     let node = xml.evaluate(
-        `/teryt/catalog/row[./RODZ=8]`,
+        `/teryt/catalog/row[./RODZ=8 or ./RODZ=9]`,
         xml,
         null,
         XPathResult.ANY_TYPE,
