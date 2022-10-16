@@ -21,6 +21,15 @@ export default class Color {
     static get black() {
         return new Color(255, 255, 255, 255);
     }
+    static get yellow() {
+        return new Color(255, 255, 0, 255);
+    }
+    static get magenta() {
+        return new Color(255, 0, 255, 255);
+    }
+    static get cyan() {
+        return new Color(0, 255, 255, 255);
+    }
 
     static get gray() {
         return new Color(100, 100, 100, 255);

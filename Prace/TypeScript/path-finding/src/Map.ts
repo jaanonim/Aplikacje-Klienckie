@@ -92,7 +92,9 @@ export default class Map implements MapInterface {
             Color.blue,
             Color.green,
             Color.white,
-            Color.black,
+            Color.yellow,
+            Color.magenta,
+            Color.cyan,
         ];
 
         this.colors = [getRandom(COLORS), getRandom(COLORS), getRandom(COLORS)];
