@@ -3,7 +3,7 @@ import { getRandom } from "./math/Math";
 import Vector2 from "./math/Vector2";
 import Node from "./Node";
 
-interface MapInterface {
+export interface MapInterface {
     readonly map: Array<Array<Node>>;
     sizeX: number;
     sizeY: number;

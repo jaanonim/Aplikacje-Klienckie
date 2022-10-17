@@ -2,7 +2,7 @@ import Color from "./math/Color";
 import Map from "./Map";
 import Vector2 from "./math/Vector2";
 
-interface NodeInterface {
+export interface NodeInterface {
     x: number;
     y: number;
     previous: Node | null;
@@ -10,7 +10,6 @@ interface NodeInterface {
     map: Map;
     color: Color;
     html: HTMLElement;
-    circle: HTMLElement;
 }
 
 /**

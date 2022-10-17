@@ -1,5 +1,19 @@
 import { clamp, map } from "./Math";
 
+export function grayscale(
+    _target: Color,
+    _name: string,
+    descriptor: PropertyDescriptor
+) {
+    let originalMethod = descriptor.value;
+    descriptor.value = function (...args: any[]) {
+        const t = this as Color;
+        const v = t.b + t.r + t.g / (3 * 255);
+        return originalMethod.apply(new Color(v, v, v, t.a), args);
+    };
+    return descriptor;
+}
+
 export default class Color {
     r: number;
     g: number;
@@ -48,6 +62,13 @@ export default class Color {
         );
     }
 
+    /**
+     * Create new color
+     * @param r red value in range 0-255
+     * @param g green value in range 0-255
+     * @param b blue value in range 0-255
+     * @param a opacity value in range 0-255
+     */
     constructor(r: number = 0, g: number = 0, b: number = 0, a: number = 255) {
         this.r = clamp(r, 0, 255);
         this.g = clamp(g, 0, 255);
@@ -73,6 +94,11 @@ export default class Color {
         );
     }
 
+    /**
+     * @todo add decorator
+     * @returns string for css
+     */
+    //@grayscale
     getStringRGBA() {
         return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
     }
