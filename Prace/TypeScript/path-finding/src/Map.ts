@@ -239,6 +239,10 @@ export default class Map implements MapInterface {
             this.spawnRandom(c);
         });
         this.setNextColors();
+        if (this.free.length === 0) {
+            alert(`You died with ${this.points} points`);
+            return;
+        }
     }
 
     /**
