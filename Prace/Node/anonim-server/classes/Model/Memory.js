@@ -4,22 +4,22 @@ class Memory extends Model {
     static #store = [];
     static #id = 0;
 
-    static find(findFunc) {
+    static _find(findFunc) {
         return Memory.#store.find(findFunc);
     }
 
-    static findAll(findFunc) {
+    static _findAll(findFunc) {
         return Memory.#store.filter(findFunc);
     }
 
-    static create(obj) {
+    static _create(obj) {
         obj.id = Memory.#id;
         Memory.#id++;
         Memory.#store.push(obj);
         return obj;
     }
 
-    static update(findFunc, obj) {
+    static _update(findFunc, obj) {
         if (obj.id) {
             delete obj.id;
         }
@@ -36,7 +36,7 @@ class Memory extends Model {
         return res;
     }
 
-    static delete(findFunc) {
+    static _delete(findFunc) {
         let objs = Memory.#store.filter(findFunc);
         let res = [];
         objs.forEach((element) => {
