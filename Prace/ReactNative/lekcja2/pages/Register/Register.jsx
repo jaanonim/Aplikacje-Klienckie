@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { TextInput, View } from "react-native";
+import { Alert, TextInput, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Button";
 import Text from "../../components/Text";
@@ -56,12 +56,13 @@ function Register() {
                     onChangeText={setPassword}
                 ></TextInput>
                 <Button
-                    onClick={() => {
-                        create({
+                    onClick={async () => {
+                        const v = await create({
                             login: login,
                             password: password,
                         });
-                        navigation.navigate("AdminList");
+                        if (v.error) Alert.alert(v.error);
+                        else navigation.navigate("AdminList");
                     }}
                 >
                     Register

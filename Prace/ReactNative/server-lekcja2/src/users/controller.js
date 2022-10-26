@@ -7,8 +7,26 @@ const Server = require("anonim-server/classes/Server");
 const path = require("path");
 const fs = require("fs").promises;
 
-console.log(UserModel);
-const UserControler = new ControlerFactory("User", UserModel).create({});
+const UserControler = new ControlerFactory("User", UserModel).create({
+    async create(ctx) {
+        const b = ctx.getBody();
+        console.log(b);
+
+        if (b && b.login && b.login.length > 3) {
+            const u = await this.Model.findAll((e) => e.login === b.login);
+            if (u.length > 0) {
+                ctx.sendCodeJson(400, {
+                    error: `This login is allery registred.`,
+                });
+                return;
+            }
+            b.date = new Date().toLocaleString();
+            ctx.sendJson(this.Model.create(b));
+        } else {
+            ctx.sendCodeJson(400, { error: "Something went wrong" });
+        }
+    },
+});
 
 /*{
     async create(ctx) {

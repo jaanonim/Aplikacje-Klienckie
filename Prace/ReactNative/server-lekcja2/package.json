@@ -11,7 +11,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "anonim-server": "^2.0.1"
+        "anonim-server": "^2.0.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.13"

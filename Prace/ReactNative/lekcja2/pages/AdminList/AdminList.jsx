@@ -3,7 +3,8 @@ import { FlatList, Image, View } from "react-native";
 import Button from "../../components/Button";
 import Text from "../../components/Text";
 import { useNavigation } from "@react-navigation/native";
-import { getAll } from "../../util/api";
+import { del, getAll } from "../../util/api";
+import ListElement from "./components/ListElement";
 
 function AdminList() {
     const navigation = useNavigation();
@@ -27,54 +28,7 @@ function AdminList() {
                 style={{ flex: 1 }}
                 data={data}
                 renderItem={({ item }) => (
-                    <View
-                        style={{
-                            flexDirection: "row",
-                        }}
-                    >
-                        <Image
-                            style={{ width: 100, height: 100 }}
-                            source={require("./icon.png")}
-                        ></Image>
-                        <View>
-                            <Text
-                                style={{
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: 5,
-                                    fontSize: 20,
-                                }}
-                            >
-                                {item.login}
-                            </Text>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <Button
-                                    onClick={() => {
-                                        navigation.navigate(
-                                            "AdminDetail",
-                                            item,
-                                        );
-                                    }}
-                                    style={{ padding: 10 }}
-                                >
-                                    Detail
-                                </Button>
-                                <Button
-                                    onClick={() => {}}
-                                    style={{ padding: 10 }}
-                                    accent={true}
-                                >
-                                    Delete
-                                </Button>
-                            </View>
-                        </View>
-                    </View>
+                    <ListElement item={item}></ListElement>
                 )}
             />
         </>
