@@ -1,5 +1,6 @@
 //const address = "http://192.168.1.109:3000/api";
-const address = "http://192.168.1.105:3000/api";
+//const address = "http://192.168.1.105:3000/api";
+import { address } from "../settings.json";
 
 export async function getAll() {
     try {
