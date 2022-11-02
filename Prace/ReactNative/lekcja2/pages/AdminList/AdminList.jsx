@@ -7,7 +7,6 @@ import { del, getAll } from "../../util/api";
 import ListElement from "./components/ListElement";
 
 function AdminList() {
-    const navigation = useNavigation();
     const [data, setData] = useState([
         {
             login: "aaa",
@@ -28,7 +27,7 @@ function AdminList() {
                 style={{ flex: 1 }}
                 data={data}
                 renderItem={({ item }) => (
-                    <ListElement item={item}></ListElement>
+                    <ListElement item={item} setData={setData}></ListElement>
                 )}
             />
         </>

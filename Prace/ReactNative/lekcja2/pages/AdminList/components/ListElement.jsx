@@ -1,4 +1,11 @@
-function ListElement({ item }) {
+import { FlatList, Image, View } from "react-native";
+import Button from "../../../components/Button";
+import Text from "../../../components/Text";
+import { useNavigation } from "@react-navigation/native";
+import { del, getAll } from "../../../util/api";
+
+function ListElement({ item, setData }) {
+    const navigation = useNavigation();
     return (
         <View
             style={{
@@ -38,7 +45,7 @@ function ListElement({ item }) {
                     <Button
                         onClick={async () => {
                             await del(item.id);
-                            setData(data.filter((e) => e.id !== item.id));
+                            setData((d) => d.filter((e) => e.id !== item.id));
                         }}
                         style={{ padding: 10 }}
                         accent={true}
