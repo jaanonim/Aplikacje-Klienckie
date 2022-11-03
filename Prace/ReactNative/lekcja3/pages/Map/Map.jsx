@@ -1,4 +1,3 @@
-import Text from "../../components/Text";
 import { useRoute } from "@react-navigation/native";
 import MapView from "react-native-maps";
 

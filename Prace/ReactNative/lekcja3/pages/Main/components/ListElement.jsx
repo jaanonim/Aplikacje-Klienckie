@@ -1,6 +1,5 @@
 import { Image, View, Switch } from "react-native";
 import Text from "../../../components/Text";
-import { useState } from "react";
 
 function ListElement({ item, onValueChange }) {
     return (
@@ -50,7 +49,7 @@ function ListElement({ item, onValueChange }) {
                     </Text>
                 </View>
                 <Switch
-                    style={{ flexGrow: 20, flexBasis: 20 }}
+                    style={{ flexGrow: 30, flexBasis: 30 }}
                     value={item.value}
                     onValueChange={onValueChange}
                 />
