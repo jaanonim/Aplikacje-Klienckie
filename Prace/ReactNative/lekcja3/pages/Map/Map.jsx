@@ -7,8 +7,8 @@ function Map() {
         <MapView
             style={{ flex: 1 }}
             initialRegion={{
-                latitude: 50.111,
-                longitude: 20.111,
+                latitude: route.params.checked[0].latitude,
+                longitude: route.params.checked[0].longitude,
                 latitudeDelta: 0.001,
                 longitudeDelta: 0.001,
             }}
