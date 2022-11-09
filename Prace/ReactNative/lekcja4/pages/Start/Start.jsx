@@ -38,9 +38,9 @@ function Start() {
                     fontSize: 60,
                 }}
             >
-                GeoApp
+                CamApp
             </Text>
-            <Text main={true}>lekcja 3</Text>
+            <Text main={true}>lekcja 4</Text>
         </TouchableOpacity>
     );
 }
