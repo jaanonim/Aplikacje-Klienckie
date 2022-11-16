@@ -11,17 +11,20 @@ import * as MediaLibrary from "expo-media-library";
 function Main() {
     const [data, setData] = useState([]);
     const [selectMode, setSelectMode] = useState(false);
-    const [layout, setLayout] = useState(false);
+    const [layout, setLayout] = useState(true);
     const [permissionResponse, requestPermission] =
         MediaLibrary.usePermissions();
     const navigation = useNavigation();
 
     const fetchData = useCallback(async () => {
-        const { assets } = await MediaLibrary.getAssetsAsync({
-            first: 100,
-            mediaType: "photo",
-        });
-        setData(assets.map((e) => ({ ...e, selected: false })));
+        const { assets, hasNextPage, endCursor } =
+            await MediaLibrary.getAssetsAsync({
+                first: 100,
+                mediaType: "photo",
+                sortBy: ["creationTime"],
+            });
+        const newAssets = assets.map((e) => ({ ...e, selected: false }));
+        setData(newAssets);
     }, []);
 
     const updateData = useCallback(
@@ -33,19 +36,21 @@ function Main() {
                 return newV;
             });
         },
-        [data],
+        [data]
     );
 
     useEffect(() => {
-        requestPermission();
+        try {
+            requestPermission();
+        } catch (e) {}
     }, []);
     useEffect(() => {
-        fetchData();
+        if (permissionResponse?.granted) fetchData();
     }, [permissionResponse]);
 
     return (
         <>
-            {!permissionResponse ? (
+            {!permissionResponse?.granted ? (
                 <View
                     style={{
                         flex: 1,
@@ -58,7 +63,7 @@ function Main() {
                         onClick={async () => {
                             requestPermission();
                         }}
-                        style={{ flex: 1, height: 40, padding: 0 }}
+                        style={{ flexGrow: 0.05 }}
                     >
                         Try again.
                     </Button>
@@ -108,9 +113,9 @@ function Main() {
                                             .map(async (e) => {
                                                 await MediaLibrary.removeAssetsFromAlbumAsync(
                                                     e.id,
-                                                    e.albumId,
+                                                    e.albumId
                                                 );
-                                            }),
+                                            })
                                     );
                                     await fetchData();
                                 }}
@@ -144,8 +149,8 @@ function Main() {
                                                           ...i,
                                                           selected: !i.selected,
                                                       }
-                                                    : i,
-                                            ),
+                                                    : i
+                                            )
                                         );
                                     }}
                                     onPress={() => {
@@ -158,8 +163,8 @@ function Main() {
                                                               selected:
                                                                   !i.selected,
                                                           }
-                                                        : i,
-                                                ),
+                                                        : i
+                                                )
                                             );
                                         } else {
                                             navigation.navigate("Photo", {
