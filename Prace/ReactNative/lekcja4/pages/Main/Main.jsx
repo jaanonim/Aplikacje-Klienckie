@@ -1,28 +1,51 @@
 import Text from "../../components/Text";
 import { View, Switch, FlatList, Alert } from "react-native";
 import Button from "../../components/Button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ListElement from "./components/ListElement";
 import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native";
 import Theme from "../../Theme";
+import * as MediaLibrary from "expo-media-library";
 
 function Main() {
-    const [all, setAll] = useState(false);
-    const navigation = useNavigation();
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [selectMode, setSelectMode] = useState(false);
+    const [layout, setLayout] = useState(false);
+    const [permissionResponse, requestPermission] =
+        MediaLibrary.usePermissions();
+    const navigation = useNavigation();
+
+    const fetchData = useCallback(async () => {
+        const { assets } = await MediaLibrary.getAssetsAsync({
+            first: 100,
+            mediaType: "photo",
+        });
+        setData(assets.map((e) => ({ ...e, selected: false })));
+    }, []);
+
+    const updateData = useCallback(
+        (v) => {
+            setData((d) => {
+                const newV = v(d);
+                if (newV.some((e) => e.selected)) setSelectMode(true);
+                else setSelectMode(false);
+                return newV;
+            });
+        },
+        [data],
+    );
 
     useEffect(() => {
-        const f = async () => {
-            if (d) setData(JSON.parse(d));
-        };
-        f();
+        requestPermission();
     }, []);
+    useEffect(() => {
+        fetchData();
+    }, [permissionResponse]);
 
     return (
         <>
-            {loading ? (
+            {!permissionResponse ? (
                 <View
                     style={{
                         flex: 1,
@@ -30,7 +53,15 @@ function Main() {
                         justifyContent: "center",
                     }}
                 >
-                    <ActivityIndicator size="large" color={Theme.accent} />
+                    <Text> Missing gallery permissions.</Text>
+                    <Button
+                        onClick={async () => {
+                            requestPermission();
+                        }}
+                        style={{ flex: 1, height: 40, padding: 0 }}
+                    >
+                        Try again.
+                    </Button>
                 </View>
             ) : (
                 <>
@@ -51,124 +82,93 @@ function Main() {
                         >
                             <Button
                                 onClick={async () => {
-                                    setLoading(true);
-                                    let pos = {};
-                                    setLoading(false);
-
-                                    Alert.alert(
-                                        "Position",
-                                        "Do you want to save position?",
-                                        [
-                                            {
-                                                text: "yes",
-                                                onPress: async () => {
-                                                    setData((d) => {
-                                                        const v = [
-                                                            ...d,
-                                                            {
-                                                                id: d.length,
-                                                                timestamp:
-                                                                    pos.timestamp,
-                                                                latitude:
-                                                                    pos.coords
-                                                                        .latitude,
-                                                                longitude:
-                                                                    pos.coords
-                                                                        .longitude,
-                                                                value: false,
-                                                            },
-                                                        ];
-                                                        return v;
-                                                    });
-                                                },
-                                            },
-                                            {
-                                                text: "no",
-                                            },
-                                        ],
-                                    );
+                                    setLayout((l) => !l);
                                 }}
                                 style={{ flex: 1, height: 40, padding: 0 }}
                             >
-                                Save
+                                Layout
                             </Button>
                             <Button
-                                onClick={() => {
-                                    setData([]);
-                                }}
-                                style={{ flex: 1, height: 40, padding: 0 }}
-                            >
-                                Delete all
-                            </Button>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                flexDirection: "row",
-                            }}
-                        >
-                            <View style={{ flex: 1, margin: 10 }}></View>
-                            <Button
-                                onClick={() => {
-                                    const checked = data.filter((e) => e.value);
-                                    if (checked.length === 0)
-                                        Alert.alert(
-                                            "You need to select something",
-                                        );
-                                    else
-                                        navigation.navigate("Map", { checked });
-                                }}
-                                style={{
-                                    flex: 5,
-                                    height: 40,
-                                    padding: 0,
-                                    width: 20,
-                                }}
-                            >
-                                Go to map
-                            </Button>
-                            <Switch
-                                style={{ flex: 1, margin: 10 }}
-                                value={all}
-                                onValueChange={() => {
-                                    setAll((p) => {
-                                        setData((data) =>
-                                            data.map((e) => {
-                                                e.value = !p;
-
-                                                return e;
-                                            }),
-                                        );
-                                        return !p;
+                                onClick={async () => {
+                                    navigation.navigate("Camera", {
+                                        refetch: async () => {
+                                            await fetchData();
+                                        },
                                     });
                                 }}
-                            />
+                                style={{ flex: 1, height: 40, padding: 0 }}
+                            >
+                                Camera
+                            </Button>
+                            <Button
+                                onClick={async () => {
+                                    await Promise.all(
+                                        data
+                                            .filter((e) => e.selected)
+                                            .map(async (e) => {
+                                                await MediaLibrary.removeAssetsFromAlbumAsync(
+                                                    e.id,
+                                                    e.albumId,
+                                                );
+                                            }),
+                                    );
+                                    await fetchData();
+                                }}
+                                style={{ flex: 1, height: 40, padding: 0 }}
+                            >
+                                Delete
+                            </Button>
                         </View>
                     </View>
                     <View
                         style={{
-                            flex: 6,
+                            flex: 7,
                             alignItems: "center",
                             justifyContent: "center",
                         }}
                     >
                         <FlatList
+                            key={layout ? "h" : "v"}
                             style={{ flex: 1 }}
+                            numColumns={layout ? 5 : 1}
                             data={data}
                             renderItem={({ item }) => (
                                 <ListElement
                                     item={item}
-                                    onValueChange={() => {
-                                        setData((data) =>
-                                            data.map((e) => {
-                                                if (e.id === item.id) {
-                                                    e.value = !e.value;
-                                                }
-                                                return e;
-                                            }),
+                                    isLong={layout}
+                                    onLongPress={() => {
+                                        updateData((d) =>
+                                            d.map((i) =>
+                                                i.id === item.id
+                                                    ? {
+                                                          ...i,
+                                                          selected: !i.selected,
+                                                      }
+                                                    : i,
+                                            ),
                                         );
+                                    }}
+                                    onPress={() => {
+                                        if (selectMode) {
+                                            updateData((d) =>
+                                                d.map((i) =>
+                                                    i.id === item.id
+                                                        ? {
+                                                              ...i,
+                                                              selected:
+                                                                  !i.selected,
+                                                          }
+                                                        : i,
+                                                ),
+                                            );
+                                        } else {
+                                            navigation.navigate("Photo", {
+                                                ...item,
+                                                refetch: async () => {
+                                                    await fetchData();
+                                                },
+                                            });
+                                        }
                                     }}
                                 ></ListElement>
                             )}

@@ -1,59 +1,69 @@
-import { Image, View, Switch } from "react-native";
+import {
+    Image,
+    View,
+    Switch,
+    TouchableOpacity,
+    TouchableOpacityBase,
+} from "react-native";
+import { Dimensions } from "react-native";
 import Text from "../../../components/Text";
 
-function ListElement({ item, onValueChange }) {
+function ListElement({ item, isLong, onPress, onLongPress }) {
+    const size = Dimensions.get("window").width / 5 - 7;
+    const longSize = Dimensions.get("window").width - 10;
     return (
         <>
-            <View
+            <TouchableOpacity
                 style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "stretch",
-                    flex: 1,
+                    width: isLong ? size : longSize,
+                    height: size,
+                    margin: 5,
                 }}
+                onPress={onPress}
+                onLongPress={onLongPress}
             >
                 <Image
-                    style={{ width: 100, height: 100 }}
-                    source={require("./icon.png")}
+                    style={{
+                        width: isLong ? size : longSize,
+                        height: size,
+                    }}
+                    source={{ uri: item.uri }}
                 ></Image>
-                <View style={{ flexGrow: 200, flexBasis: 200, marginLeft: 10 }}>
-                    <Text
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 5,
-                            fontSize: 20,
-                        }}
-                    >
-                        {item.timestamp}
-                    </Text>
-                    <Text
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 5,
-                            fontSize: 16,
-                        }}
-                    >
-                        {item.latitude}
-                    </Text>
-                    <Text
-                        style={{
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 5,
-                            fontSize: 16,
-                        }}
-                    >
-                        {item.longitude}
-                    </Text>
+                <View
+                    style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Text main={true}>{item.id}</Text>
                 </View>
-                <Switch
-                    style={{ flexGrow: 30, flexBasis: 30 }}
-                    value={item.value}
-                    onValueChange={onValueChange}
-                />
-            </View>
+                {item.selected ? (
+                    <View
+                        style={{
+                            position: "absolute",
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: isLong ? size : longSize,
+                                height: size,
+                                opacity: 0.5,
+                            }}
+                            source={require("./icon.png")}
+                        ></Image>
+                    </View>
+                ) : null}
+            </TouchableOpacity>
         </>
     );
 }
