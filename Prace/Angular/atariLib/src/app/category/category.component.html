@@ -1,0 +1,10 @@
+<div *ngIf="lata.length === 1">
+    <h1>404</h1>
+    <p>Category named {{categoryName}}. Not found.</p>
+</div>
+<div *ngIf="lata.length > 1">
+    <h1>{{categoryName}}</h1>
+    <a *ngFor="let item of lata" [routerLink]="item">{{item}}</a>
+    <a routerLink="/">back</a>
+</div>
+<router-outlet></router-outlet>

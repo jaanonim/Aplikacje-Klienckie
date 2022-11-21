@@ -1,0 +1,6 @@
+<input type="number" [(ngModel)]="input" (input)="onInput()">
+{{number}}
+<p *ngIf="number==='666.666'">
+    <a *ngFor="let item of zmienne" [routerLink]="['',item.name]"><img
+            [src]="'http://atarionline.pl/biblioteka/czasopisma/img/'+item.src"></a>
+</p>

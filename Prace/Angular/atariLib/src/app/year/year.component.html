@@ -1,0 +1,23 @@
+<div *ngIf="infos.length === 0">
+    <h2>404</h2>
+    <p>Year {{yearName}} in {{categoryName}}. Not found.</p>
+</div>
+<div *ngIf="infos.length  > 0">
+    <h2>{{yearName}}</h2>
+
+    <div *ngFor="let item of infos"
+        style="border: red solid 1px; clear: both; height: 200px; margin: 10px; padding: 10px;">
+        <img style="float: left; height: 200px;"
+            [src]="'http://atarionline.pl/biblioteka/czasopisma/'+categoryName+'/'+item.miniaturka">
+        <div>
+            Nazwa: {{item.nazwa}}<br>
+            Numer: {{item.numer}}<br>
+            Wydawca: {{item.wydawca}}<br>
+            Format: {{item.format}}<br>
+            Stron: {{item.stron}}<br>
+            Plik: {{item.plik}}<br>
+            Skan: {{item.skan}}<br>
+            Przetworzenie: {{item.przetworzenie}}<br>
+            Podeslal: {{item.podeslal}}<br></div>
+    </div>
+</div>
