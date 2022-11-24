@@ -1,0 +1,3 @@
+input[type="number"] {
+  -webkit-text-security: disc;
+}
