@@ -75,7 +75,7 @@ export class DataService {
       );
     } else {
       node = this.data.evaluate(
-        `/czasopisma/${category}/*[@rok=${year} and boolean(@brak)=false()]`,
+        `/czasopisma/${category}/*[@rok="${year}" and boolean(@brak)=false()]`,
         this.data,
         null,
         XPathResult.ANY_TYPE,
