@@ -1,0 +1,4 @@
+<p>Modele</p>
+<button [ngClass]="{
+    selected: selected===item.key
+}" *ngFor="let item of models" (click)="click(item)">{{item.value}}</button>

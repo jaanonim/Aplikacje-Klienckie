@@ -1,0 +1,7 @@
+.selected {
+  background-color: #f00;
+}
+button {
+  display: block;
+  width: 200px;
+}

@@ -1,0 +1,5 @@
+<h1>Hello world</h1>
+<p>{{marka}}<ng-container *ngIf="model"> - {{model}}</ng-container>
+</p>
+<app-maki class="box" (onSelect)="selectedMarka($event)"></app-maki>
+<app-modele class="box" [id]="idMarki" (onSelect)="selectedModel($event)"></app-modele>

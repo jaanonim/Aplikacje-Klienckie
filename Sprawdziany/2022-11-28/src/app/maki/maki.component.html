@@ -1,0 +1,4 @@
+<p>Marki</p>
+<button [ngClass]="{
+    selected: selected===item.key
+}" *ngFor="let item of marks" (click)="click(item)">{{item.value}}</button>
