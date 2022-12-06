@@ -79,21 +79,34 @@ function CameraComp() {
         requestPermission();
     }, []);
 
+    const width = Dimensions.get("window").width;
+    const getHeight = () => {
+        if (settings.Ratio) {
+            const data = settings.Ratio.split(":");
+            return width * (data[0] / data[1]);
+        }
+        return width * (4 / 3);
+    };
+
     return (
         <>
             {permission?.granted ? (
-                <>
+                <View
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
+                        backgroundColor: "black",
+                    }}
+                >
                     <Camera
                         ref={camera}
-                        style={{
-                            width: Dimensions.get("window").width,
-                            height: Dimensions.get("window").height,
-                        }}
                         type={type}
                         whiteBalance={settings.WhiteBalance}
                         flashMode={settings.FlashMode}
                         ratio={settings.Ratio}
                         pictureSize={settings.Size}
+                        width={width}
+                        height={getHeight()}
                         onCameraReady={async () => {
                             const siz = [];
                             const ratio =
@@ -113,13 +126,14 @@ function CameraComp() {
                             setSizes(siz);
                             setReady(true);
                         }}
-                    >
+                    ></Camera>
+                    {ready ? (
                         <View
                             style={{
                                 position: "absolute",
                                 left: 0,
                                 right: 0,
-                                bottom: 20,
+                                bottom: 10,
                                 justifyContent: "center",
                                 alignItems: "center",
                             }}
@@ -181,7 +195,7 @@ function CameraComp() {
                                 </Button>
                             </View>
                         </View>
-                    </Camera>
+                    ) : null}
                     {isSettings ? (
                         <Animated.View
                             style={{
@@ -231,7 +245,7 @@ function CameraComp() {
                             ></FlatList>
                         </Animated.View>
                     ) : null}
-                </>
+                </View>
             ) : (
                 <View
                     style={{
