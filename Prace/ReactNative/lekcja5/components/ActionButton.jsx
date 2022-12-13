@@ -8,7 +8,7 @@ function ActionButton({ onClick }) {
         <TouchableNativeFeedback
             background={TouchableNativeFeedback.Ripple(
                 "rgba(255,255,255,1)",
-                true,
+                false
             )}
             onPress={() => onClick()}
         >
