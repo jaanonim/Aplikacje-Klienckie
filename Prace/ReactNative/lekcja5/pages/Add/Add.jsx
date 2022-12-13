@@ -34,7 +34,7 @@ function Add() {
                     const data = {
                         h: 0,
                         m: 0,
-                        days: "pn",
+                        days: "",
                     };
                     const id = await Database.getInstance().insert(data);
                     route.params.insert({

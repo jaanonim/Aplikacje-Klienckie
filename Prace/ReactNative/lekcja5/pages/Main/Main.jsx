@@ -26,7 +26,6 @@ function Main() {
         //await Database.getInstance().clear();
         setData(await Database.getInstance().get());
     });
-
     return (
         <>
             <View
@@ -39,6 +38,7 @@ function Main() {
                 <ScrollView>
                     {data.map((ele) => (
                         <ListElement
+                            key={ele.id}
                             item={ele}
                             onDelete={(id) => {
                                 setData((d) => d.filter((e) => e.id !== id));

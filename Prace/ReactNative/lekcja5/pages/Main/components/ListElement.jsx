@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
     Image,
     View,
@@ -12,12 +12,14 @@ import { AntDesign } from "@expo/vector-icons";
 import Theme from "../../../Theme";
 import { TouchableNativeFeedback } from "react-native";
 import Database from "../../../services/Database";
+import { Animated } from "react-native";
 
 function ListElement({ item, onDelete }) {
     const size = Dimensions.get("window").width - 10;
     const [value, setValue] = useState(false);
     const [dropdown, setDropdown] = useState(false);
     const [days, setDays] = useState(item.days);
+    const heightAnim = useRef(new Animated.Value(0)).current;
 
     const formatNumber = (n) => {
         if (n < 10) {
@@ -62,7 +64,7 @@ function ListElement({ item, onDelete }) {
                     <TouchableNativeFeedback
                         background={TouchableNativeFeedback.Ripple(
                             "rgba(0,0,0,1)",
-                            true,
+                            true
                         )}
                         onPress={() => {
                             Database.getInstance().delete(item.id);
@@ -90,10 +92,25 @@ function ListElement({ item, onDelete }) {
                     <TouchableNativeFeedback
                         background={TouchableNativeFeedback.Ripple(
                             "rgba(0,0,0,1)",
-                            true,
+                            true
                         )}
                         onPress={() => {
-                            setDropdown((d) => !d);
+                            if (dropdown) {
+                                Animated.timing(heightAnim, {
+                                    toValue: 0,
+                                    duration: 500,
+                                    useNativeDriver: false,
+                                }).start(() => {
+                                    setDropdown((d) => !d);
+                                });
+                            } else {
+                                Animated.timing(heightAnim, {
+                                    toValue: 70,
+                                    duration: 500,
+                                    useNativeDriver: false,
+                                }).start();
+                                setDropdown((d) => !d);
+                            }
                         }}
                     >
                         <View
@@ -116,47 +133,75 @@ function ListElement({ item, onDelete }) {
                     </TouchableNativeFeedback>
                 </View>
                 {dropdown ? (
-                    <View
+                    <Animated.View
                         style={{
-                            flexDirection: "row",
-                            margin: 10,
-                            justifyContent: "space-between",
+                            height: heightAnim,
                         }}
                     >
-                        {["pn", "wt", "sr", "cz", "pt", "sb", "nd"].map((e) => (
-                            <TouchableNativeFeedback
-                                background={TouchableNativeFeedback.Ripple(
-                                    "rgba(0,0,0,1)",
-                                    true,
-                                )}
-                                onPress={() => {
-                                    setDays((d) => {if(days
-                                        .split(", ")
-                                        });
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        backgroundColor: days
-                                            .split(", ")
-                                            .some((i) => i === e)
-                                            ? Theme.accent
-                                            : null,
-                                        width: 40,
-                                        height: 40,
-                                        zIndex: 1000,
-                                        borderRadius: 100,
-                                    }}
-                                >
-                                    <Text>{e}</Text>
-                                </View>
-                            </TouchableNativeFeedback>
-                        ))}
-                    </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                margin: 10,
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            {["pn", "wt", "sr", "cz", "pt", "sb", "nd"].map(
+                                (e, i) => (
+                                    <TouchableNativeFeedback
+                                        background={TouchableNativeFeedback.Ripple(
+                                            "rgba(0,0,0,1)",
+                                            true
+                                        )}
+                                        key={i}
+                                        onPress={async () => {
+                                            let tab =
+                                                days.length === 0
+                                                    ? []
+                                                    : days.split(", ");
+
+                                            if (
+                                                tab.some((item) => item === e)
+                                            ) {
+                                                tab = tab.filter(
+                                                    (item) => item !== e
+                                                );
+                                            } else {
+                                                tab.push(e);
+                                            }
+                                            const res = tab.join(", ");
+                                            setDays(res);
+                                            await Database.getInstance().update(
+                                                item.id,
+                                                {
+                                                    days: res,
+                                                }
+                                            );
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                backgroundColor: days
+                                                    .split(", ")
+                                                    .some((i) => i === e)
+                                                    ? Theme.accent
+                                                    : null,
+                                                width: 40,
+                                                height: "100%",
+                                                zIndex: 1000,
+                                                borderRadius: 100,
+                                            }}
+                                        >
+                                            <Text>{e}</Text>
+                                        </View>
+                                    </TouchableNativeFeedback>
+                                )
+                            )}
+                        </View>
+                    </Animated.View>
                 ) : (
-                    <Text style={{ marginLeft: 20 }}>{item.days}</Text>
+                    <Text style={{ marginLeft: 20 }}>{days}</Text>
                 )}
             </View>
         </>

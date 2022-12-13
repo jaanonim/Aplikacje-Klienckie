@@ -25,8 +25,8 @@ export default class Database {
                     () => {
                         this.isSetup = true;
                         res();
-                    },
-                ),
+                    }
+                )
             );
         });
     }
@@ -43,8 +43,8 @@ export default class Database {
                     () => {
                         this.isSetup = false;
                         res();
-                    },
-                ),
+                    }
+                )
             );
         });
     }
@@ -55,7 +55,7 @@ export default class Database {
             this.db.transaction((t) => {
                 t.executeSql(
                     `INSERT INTO ${this.tableName} (${Object.keys(data).join(
-                        ", ",
+                        ", "
                     )}) values (${Object.values(data)
                         .map((s) => "'" + s + "'")
                         .join(", ")})`,
@@ -64,30 +64,30 @@ export default class Database {
                     },
                     (tx, results) => {
                         resolve(results.insertId);
-                    },
+                    }
                 );
-            }),
+            })
         );
     }
 
     async update(id, data) {
         if (!this.isSetup) await this.setup();
-        return await new Promise((resolve, reject) =>
+        return await new Promise((resolve, reject) => {
+            const sql = `UPDATE ${this.tableName} SET ${Object.keys(data)
+                .map((k) => k + "='" + data[k] + "'")
+                .join(" ")} WHERE id=${id}`;
             this.db.transaction((t) => {
                 t.executeSql(
-                    `UPDATE ${this.tableName} SET ${
-                        (Object.keys(data).map((k) => k + "=" + data[k]),
-                        join(" "))
-                    }) WHERE id=${id}`,
+                    sql,
                     (tx, results) => {
                         resolve(results.insertId);
                     },
                     (tx, results) => {
                         resolve(results.insertId);
-                    },
+                    }
                 );
-            }),
-        );
+            });
+        });
     }
 
     async get() {
@@ -102,9 +102,9 @@ export default class Database {
                     },
                     (tx, error) => {
                         reject(error);
-                    },
+                    }
                 );
-            }),
+            })
         );
     }
 
